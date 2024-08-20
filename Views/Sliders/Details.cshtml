@@ -1,0 +1,68 @@
+﻿@model HarmonyHotles.Models.Slider
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Slider</h4>
+    <hr />
+    <dl class="row" >
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Imagepath)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src=@Url.Content("~/images/sliders/" + Model.Imagepath) asp-append-version="true"
+                 style="border-radius:15%"
+                 width="100" height="100" />
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Buttontext)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Buttontext)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Buttonlink)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Buttonlink)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Isactive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Isactive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Displayorder)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayNameFor(model => model.Displayorder)
+        </dd>
+    </dl>
+</div>
+<div class="text-center mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Sliderid" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
