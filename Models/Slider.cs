@@ -23,5 +23,5 @@ public partial class Slider
     public decimal? Displayorder { get; set; }
 
     [NotMapped]
-    public virtual IFormFile ImageFile { get; set; }
+    public virtual IFormFile ? ImageFile { get; set; }
 }

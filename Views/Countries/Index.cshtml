@@ -1,0 +1,46 @@
+﻿@model IEnumerable<HarmonyHotles.Models.Country>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Countryname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagepath)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Countryname)
+            </td>
+            <td>
+                
+                    <img src=@Url.Content("~/images/Countries/"+ item.Imagepath )
+                         asp-append-version="true" style="border-radius:15%"
+                         width="200" height="200" />
+
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Countryid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Countryid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Countryid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

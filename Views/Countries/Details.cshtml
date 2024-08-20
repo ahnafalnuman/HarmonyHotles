@@ -1,0 +1,33 @@
+﻿@model HarmonyHotles.Models.Country
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Country</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Countryname)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Countryname)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Imagepath)
+        </dt>
+        <dd class = "col-sm-10">
+            <img src=@Url.Content("~/images/Countries/" + Model.Imagepath) asp-append-version="true"
+                 style="border-radius:15%"
+                 width="100" height="100" />
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Countryid">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

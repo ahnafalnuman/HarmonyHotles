@@ -16,12 +16,27 @@ namespace HarmonyHotles.Controllers
         {
             return View();
         }
-    
-      
-    
 
-
+        public IActionResult Countries()
+        {
+          
+            return RedirectToAction("Index", "Countries");
         }
+
+        public IActionResult Cities()
+        {
+
+            return RedirectToAction("Index", "cities");
+        }
+
+        public IActionResult Sliders()
+        {
+            return RedirectToAction("Index","Sliders");
+        }
+
+
+
+    }
 
 
     }

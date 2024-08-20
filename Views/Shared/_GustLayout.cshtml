@@ -39,26 +39,51 @@
                 <div class="container-fluid">
                     <div class="header_bottom_border">
                         <div class="row align-items-center">
+                            <!-- Logo Section -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="index.html">
+                                    <a asp-controller="Home" asp-action="Index">
                                         <img src="~/HomeDesign/img/logo.jpg" alt="logo image" width="70%" height="70%">
                                     </a>
                                 </div>
                             </div>
+
+                            <!-- Navigation Menu -->
                             <div class="col-xl-6 col-lg-6">
                                 <div class="main-menu d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">
-                                            <li><a class="active" href="index.html">Home</a></li>
-                                            <li><a href="travel_destination.html">Hotels</a></li>
-                                            <li><a href="about.html">About Us</a></li>
-                                            <li><a href="contact.html">Contact Us</a></li>
+                                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                            <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+                                            <li><a asp-controller="Home" asp-action="Contact">Contact Us</a></li>
+
+                                            <!-- Dropdown Menu for Services -->
+                                            <li>
+                                                <a href="#">Services <i class="ti-angle-down"></i></a>
+                                                <ul class="submenu">
+                                                    <li><a asp-controller="Home" asp-action="DisplayAllCities">Hotels</a></li>
+                                                    <li><a asp-controller="Home" asp-action="DisplayAllEvents">Events</a></li>
+                                                    <li><a asp-controller="Home" asp-action="Index">Booking</a></li>
+                                                    <li><a asp-controller="Home" asp-action="DisplayAllCountries">Country</a></li>
+                                                    <li><a asp-controller="Home" asp-action="DisplayAllCities">Cities</a></li>
+                                                </ul>
+                                            </li>
+
+                                            <!-- Dropdown Menu for Register / Log In -->
+                                            <li>
+                                                <a href="#">Register / Log In <i class="ti-angle-down"></i></a>
+                                                <ul class="submenu">
+                                                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                                                    <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+                                                </ul>
+                                            </li>
+
+                                            <!-- Dropdown Menu for More -->
                                             <li>
                                                 <a href="#">More <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="single-blog.html">Single Blog</a></li>
+                                                    <li><a asp-controller="Blog" asp-action="Index">Blog</a></li>
+                                                    <li><a asp-controller="Blog" asp-action="SingleBlog">Single Blog</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -66,8 +91,10 @@
                                 </div>
                             </div>
 
+                            <!-- Social Media, Search, and Currency Section -->
                             <div class="col-xl-4 col-lg-4 d-none d-lg-block">
                                 <div class="social_wrap d-flex align-items-center justify-content-end">
+                                    <!-- Social Media Links -->
                                     <div class="social_links d-none d-xl-block">
                                         <ul>
                                             <li><a href="https://www.instagram.com/"><i class="fa fa-instagram"></i></a></li>
@@ -77,6 +104,7 @@
                                         </ul>
                                     </div>
 
+                                    <!-- Search Form -->
                                     <div class="header-search">
                                         <form asp-action="Search" asp-controller="Home" method="get">
                                             <input type="text" name="query" placeholder="Search here..." />
@@ -84,7 +112,8 @@
                                         </form>
                                     </div>
 
-                                    <form asp-action="ChangeCurrency" asp-controller="Currency" method="post">
+                                    <!-- Currency Selector -->
+                                    <form asp-action="ChangeCurrency" asp-controller="Currency" method="post" class="ml-3">
                                         <select name="toCurrency" onchange="this.form.submit()" size="1">
                                             <option value="JOD">JOD</option>
                                             <option value="USD">USD</option>

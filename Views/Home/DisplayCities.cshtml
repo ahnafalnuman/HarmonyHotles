@@ -1,0 +1,104 @@
+﻿@model IEnumerable<HarmonyHotles.Models.City>
+@{
+
+    Layout = "~/Views/Shared/_GustLayout.cshtml";
+}
+
+<style>
+    .view-all-cities-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+    }
+
+    .btn-view-all-cities {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #fff;
+        background-color: #3498db;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        position: relative;
+    }
+
+        .btn-view-all-cities:hover {
+            background-color: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+
+    .btn-icon {
+        margin-right: 10px;
+        font-size: 1.8rem;
+        vertical-align: middle;
+    }
+
+    .btn-view-all-cities::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        border-radius: 50px;
+        background: linear-gradient(45deg, #ff6b6b, #f09433, #3498db);
+        z-index: -1;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .btn-view-all-cities:hover::before {
+        opacity: 1;
+    }
+
+
+</style>
+<div class="view-all-cities-container text-center mt-5">
+    <a  asp-controller="Home" asp-action="DisplayAllCities" class="btn-view-all-cities">
+        <span class="btn-icon">&#x1F4CD;</span>
+        View All Cities
+    </a>
+</div>
+
+<div class="popular_destination_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center mb_70">
+                    <h3>CITIES IN @ViewBag.CountryName</h3>
+                </div>
+              
+
+            </div>
+         
+
+        </div>
+        <div class="row">
+            @foreach (var city in Model)
+            {
+                <div class="col-lg-6 col-md-12">
+                    <div class="single_destination">
+                        <div class="thumb">
+                            <img src="@Url.Content("~/images/Cities/" + city.Imagepath)" width="150%" height="200%" alt="@city.Cityname" asp-append-version="true">
+                        </div>
+                        <div class="content">
+                            <p class="d-flex align-items-center">
+                                @city.Cityname
+                                <a asp-controller="Home" asp-action="DisplayHotels" asp-route-cityId="@city.Cityid">
+                                    <span> (@city.Hotels.Count) Hotels</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,5 +1,6 @@
 ﻿@RenderSection("scripts", required: false)
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,6 +137,7 @@
         </div>
 
         <!-- Sidebar -->
+        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-inner slimscroll">
                 <div id="sidebar-menu" class="sidebar-menu">
@@ -143,20 +145,80 @@
                         <li class="active">
                             <a href="@Url.Action("Index", "Admin")"><img src="~/AdminDesign/assets/img/icons/dashboard.svg" alt="img"><span> Dashboard</span></a>
                         </li>
+
+                        <!-- Manage Content section with submenu -->
                         <!-- Manage Content section with submenu -->
                         <li class="submenu">
                             <a href="javascript:void(0);"><i class="fas fa-cogs"></i><span> Manage Content</span> <span class="menu-arrow"></span></a>
                             <ul class="submenu-list" style="display: none;">
-                                <li><a href="@Url.Action("Sliders", "ManageContent")"><i class="fas fa-images"></i> Sliders</a></li>
-                                <li><a href="@Url.Action("Videos", "ManageContent")"><i class="fas fa-video"></i> Videos</a></li>
-                                <li><a href="@Url.Action("Destinations", "ManageContent")"><i class="fas fa-map-marker-alt"></i> Destinations</a></li>
+                                <li><a asp-action="Testimonials"><i class="fas fa-comments"></i> Testimonials</a></li>
+                                <li class="submenu">
+                                    <a href="javascript:void(0);"><i class="fas fa-home"></i><span> Home</span><span class="menu-arrow"></span></a>
+                                    <ul class="submenu-list" style="display: none;">
+                                        <li><a asp-controller="Sliders" asp-action="Index"><i class="fas fa-images"></i> Sliders</a></li>
+                                        <li><a asp-action="Destinations"><i class="fas fa-map-marker-alt"></i> Destinations</a></li>
+                                    </ul>
+                                </li>
+                                <li><a asp-action="AboutUs"><i class="fas fa-info-circle"></i> About Us</a></li>
+                                <li><a asp-action="ContactUs"><i class="fas fa-envelope"></i> Contact Us</a></li>
                             </ul>
                         </li>
-                        <!-- Add more sections as required -->
+
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-globe"></i><span> Countries & Cities</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-controller="Countries" asp-action="Index"><i class="fas fa-globe"></i> Countries page</a></li>
+                                <li> <a asp-action="Cities"><i class="fas fa-city"></i> Cities</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Hotels and Events section -->
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-hotel"></i><span> Hotels & Events</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-action="Hotels"><i class="fas fa-bed"></i> Hotels</a></li>
+                                <li> <a asp-action="Events"><i class="fas fa-calendar-alt"></i> Events</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Room Types and Rooms section -->
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-door-open"></i><span> Room Types & Rooms</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-action="RoomTypes"><i class="fas fa-th-list"></i> Room Types</a></li>
+                                <li> <a asp-action="Rooms"><i class="fas fa-bed"></i> Rooms</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Amenities section -->
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-concierge-bell"></i><span> Amenities</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-action="HotelAmenities"><i class="fas fa-hotel"></i> Hotel Amenities</a></li>
+                                <li> <a asp-action="RoomAmenities"><i class="fas fa-bed"></i> Room Amenities</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Services section -->
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-concierge-bell"></i><span> Services</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-action="HotelServices"><i class="fas fa-hotel"></i> Hotel Services</a></li>
+                                <li> <a asp-action="RoomServices"><i class="fas fa-bed"></i> Room Services</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- Users section -->
+                        <li>
+                            <a asp-action="Users"><i class="fas fa-users"></i><span> Users</span></a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
         </div>
+
 
         <!-- Main Content -->
         <div class="page-wrapper">
