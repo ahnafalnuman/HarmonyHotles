@@ -17,29 +17,48 @@ namespace HarmonyHotles.Controllers
             return View();
         }
 
-        public IActionResult Countries()
+
+
+
+        public IActionResult ManageSliders()
         {
-          
+            return RedirectToAction("Index", "Sliders");
+        }
+
+
+        public IActionResult ManageCountries()
+        {
             return RedirectToAction("Index", "Countries");
         }
 
-        public IActionResult Cities()
+        public IActionResult ManageCities()
         {
-
-            return RedirectToAction("Index", "cities");
+            return RedirectToAction("Index", "Cities");
         }
 
-        public IActionResult Sliders()
-        {
-            return RedirectToAction("Index","Sliders");
-        }
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
     }
 
 
-    }
+}
 
 
 
