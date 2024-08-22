@@ -17,10 +17,10 @@ namespace HarmonyHotles.Controllers
 
 
 
-        public EventsController(ModelContext context , IWebHostEnvironment environment)
+        public EventsController(ModelContext context, IWebHostEnvironment environment)
         {
             _context = context;
-            _environment = environment; 
+            _environment = environment;
         }
 
         // GET: Events
@@ -63,49 +63,80 @@ namespace HarmonyHotles.Controllers
         // POST: Events/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Events/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Eventid,Countryid,Hotelid,Cityid,Name,Eventsdescription,Location,Ticketprice,Timefrom,Timeto")] Event @event, List<IFormFile> images)
         {
             if (ModelState.IsValid)
             {
-                // حفظ الفعالية في قاعدة البيانات أولاً
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-
-                // تحقق من وجود صور مرفوعة
-                if (images != null && images.Count > 0)
+                try
                 {
-                    // المسار الجذر لحفظ الصور
+                    // حفظ الفعالية أولاً
+                    _context.Add(@event);
+                    await _context.SaveChangesAsync();
+
+                    // مسار حفظ الصور
                     string wwwRootPath = _environment.WebRootPath;
+                    string imagesPath = Path.Combine(wwwRootPath, "images", "events");
 
-                    foreach (var image in images)
+                    // تأكد من وجود المجلد
+                    if (!Directory.Exists(imagesPath))
                     {
-                        // إنشاء اسم فريد لكل صورة
-                        string fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
-                        string path = Path.Combine(wwwRootPath + "/images/events/", fileName);
-
-                        // حفظ الصورة في المسار المحدد
-                        using (var fileStream = new FileStream(path, FileMode.Create))
-                        {
-                            await image.CopyToAsync(fileStream);
-                        }
-
-                        // إضافة مسار الصورة وربطها بالفعالية
-                        _context.Images.Add(new Image
-                        {
-                            Eventid = @event.Eventid,
-                            Imagepath = fileName
-                        });
+                        Directory.CreateDirectory(imagesPath);
                     }
 
-                    // حفظ التغييرات في قاعدة البيانات بعد إضافة الصور
-                    await _context.SaveChangesAsync();
+                    // حفظ الصور
+                    if (images != null && images.Count > 0)
+                    {
+                        foreach (var image in images)
+                        {
+                            if (image.Length > 0)
+                            {
+                                // إنشاء اسم فريد لكل صورة
+                                string fileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+                                string path = Path.Combine(imagesPath, fileName);
+
+                                try
+                                {
+                                    // حفظ الصورة في المسار المحدد
+                                    using (var fileStream = new FileStream(path, FileMode.Create))
+                                    {
+                                        await image.CopyToAsync(fileStream);
+                                    }
+
+                                    // إضافة مسار الصورة وربطها بالفعالية
+                                    _context.Images.Add(new Image
+                                    {
+                                        Eventid = @event.Eventid,
+                                        Imagepath = fileName
+                                    });
+                                }
+                                catch (Exception ex)
+                                {
+                                    // تسجيل الاستثناء أو إظهار رسالة خطأ
+                                    Console.WriteLine($"Error saving image: {ex.Message}");
+                                }
+                            }
+                        }
+
+                        // حفظ التغييرات في قاعدة البيانات بعد إضافة الصور
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // التعامل مع أي استثناءات قد تحدث
+                    Console.WriteLine($"Error saving event: {ex.Message}");
+                    ModelState.AddModelError("", "حدث خطأ أثناء حفظ الفعالية. يرجى المحاولة مرة أخرى.");
                 }
 
                 return RedirectToAction(nameof(Index));
             }
 
+            // إعادة عرض النموذج في حال وجود خطأ
             ViewData["Cityid"] = new SelectList(_context.Cities, "Cityid", "Cityname", @event.Cityid);
             ViewData["Countryid"] = new SelectList(_context.Countries, "Countryid", "Countryname", @event.Countryid);
             ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", @event.Hotelid);
@@ -113,26 +144,31 @@ namespace HarmonyHotles.Controllers
         }
 
 
+
+
+        // GET: Events/Edit
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
-            if (id == null || _context.Events == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
+            // البحث عن الفعالية
             var @event = await _context.Events
-                .Include(e => e.Images) 
-                .FirstOrDefaultAsync(e => e.Eventid == id);
-
+                                       .Include(e => e.Images) // لجلب الصور المرتبطة بالفعالية
+                                       .FirstOrDefaultAsync(m => m.Eventid == id);
             if (@event == null)
             {
                 return NotFound();
             }
 
+            // إعداد القوائم المنسدلة للمدن، الدول، والفنادق
             ViewData["Cityid"] = new SelectList(_context.Cities, "Cityid", "Cityname", @event.Cityid);
             ViewData["Countryid"] = new SelectList(_context.Countries, "Countryid", "Countryname", @event.Countryid);
             ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", @event.Hotelid);
+
             return View(@event);
         }
 
@@ -255,21 +291,45 @@ namespace HarmonyHotles.Controllers
         {
             if (_context.Events == null)
             {
-                return Problem("Entity set 'ModelContext.Events'  is null.");
+                return Problem("Entity set 'ModelContext.Events' is null.");
             }
-            var @event = await _context.Events.FindAsync(id);
+
+            // جلب الفعالية مع الصور المرتبطة بها فقط
+            var @event = await _context.Events
+                                        .Include(e => e.Images)
+                                        .FirstOrDefaultAsync(e => e.Eventid == id);
+
             if (@event != null)
             {
+                // حذف الصور المرتبطة
+                if (@event.Images != null)
+                {
+                    foreach (var image in @event.Images)
+                    {
+                        // حذف الصورة من النظام (الملفات)
+                        string imagePath = Path.Combine(_environment.WebRootPath, "images/events", image.Imagepath);
+                        if (System.IO.File.Exists(imagePath))
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+
+                        // حذف الصورة من قاعدة البيانات
+                        _context.Images.Remove(image);
+                    }
+                }
+
+                // حذف الفعالية نفسها
                 _context.Events.Remove(@event);
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
+
         private bool EventExists(decimal id)
         {
-          return (_context.Events?.Any(e => e.Eventid == id)).GetValueOrDefault();
+            return (_context.Events?.Any(e => e.Eventid == id)).GetValueOrDefault();
         }
     }
 }
