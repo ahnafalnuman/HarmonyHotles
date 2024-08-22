@@ -7,8 +7,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
-                <div class="section_title text-center mb_70">
-                    <<h3 class="all-cities-title">ALL CITIES</h3>
+                <div class="section_title text-center mb-4">
+                    <h3 class="all-cities-title">All Cities</h3>
                 </div>
             </div>
         </div>
@@ -27,7 +27,14 @@
                                     @city.Hotels.Count Hotels
                                 </span>
                             </p>
+                            <p class="card-text">
+                                <span class="hotel-count">
+                                    @city.Events.Count Events
+                                </span>
+                            </p>
                             <a asp-controller="Home" asp-action="DisplayHotels" asp-route-cityId="@city.Cityid" class="btn btn-primary">View Hotels</a>
+                            <a asp-controller="Home" asp-action="DisplayEventInCity" asp-route-id="@city.Cityid" class="btn btn-primary">  <span> (@city.Events.Count) Events</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -100,7 +107,7 @@
             }
 
             .exclusive-card .content .hotel-count {
-                font-size: 1.2rem;
+                font-size: 1 rem;
                 color: #3498db;
                 font-weight: bold;
                 margin-top: 10px;

@@ -1,0 +1,54 @@
+﻿@model HarmonyHotles.Models.Event
+
+@{
+    ViewData["Title"] = "Delete Event";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white text-center">
+            <h3 class="mb-0">Delete Event</h3>
+        </div>
+        <div class="card-body p-4">
+            <h4 class="text-center">Are you sure you want to delete this event?</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Event Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-3 fw-bold">Description</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Eventsdescription)</dd>
+
+                <dt class="col-sm-3 fw-bold">Location</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Location)</dd>
+
+                <dt class="col-sm-3 fw-bold">Ticket Price</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Ticketprice)</dd>
+
+                <dt class="col-sm-3 fw-bold">Start Time</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Timefrom)</dd>
+
+                <dt class="col-sm-3 fw-bold">End Time</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Timeto)</dd>
+
+                <dt class="col-sm-3 fw-bold">City</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Cityname)</dd>
+
+                <dt class="col-sm-3 fw-bold">Country</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Country.Countryname)</dd>
+
+                <dt class="col-sm-3 fw-bold">Hotel</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Hotel.Name)</dd>
+            </dl>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="Eventid" />
+                <div class="text-center">
+                    <input type="submit" value="Delete" class="btn btn-danger btn-lg shadow-sm" />
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

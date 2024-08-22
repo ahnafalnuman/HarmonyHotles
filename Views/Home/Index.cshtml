@@ -1,13 +1,15 @@
-﻿@{
+﻿@model Tuple<IEnumerable<Slider>, IEnumerable<Country>, IEnumerable<City>, IEnumerable<Hotel>, IEnumerable<Event>, IEnumerable<Image>, IEnumerable<Favorite>>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 @{
 
     Layout = "~/Views/Shared/_GustLayout.cshtml";
 }
-@model Tuple<IEnumerable<Slider>,IEnumerable<Country>,IEnumerable<City>,IEnumerable<Hotel>,IEnumerable<Event>>
 
 
+   
 
 
 <!-- slider_area_start -->
@@ -103,185 +105,50 @@
 
 <!-- popular_destination_area_end  -->
 <!-- newletter_area_start  -->
-<!-- newletter_area_end  -->
+
 
 <div class="popular_places_area">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="section_title text-center mb_70">
-                    <h3>Popular Places</h3>
+                    <h3>Popular Events </h3>
                     <p>Suffered alteration in some form, by injected humour or good day randomised booth anim 8-bit hella wolf moon beard words.</p>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/1.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>California</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
+        <div class="container mt-4">
+            <div class="row">
+                @foreach (var item in Model.Item5)
+                {
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
+                            <!-- صورة الفعالية -->
+                            <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                            <!-- أيقونة القلب -->
+                            <a asp-action="AddToFavorites" asp-controller="Events" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
+                                <i class="far fa-heart text-danger"></i> <!-- هنا قمنا بتغيير fa-solid إلى far -->
+                            </a>
+
+                            <!-- محتوى البطاقة -->
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-map-marker-alt text-primary"></i> @item.City.Cityname
+                                </p>
+                                <p class="card-text fw-bold">
+                                    <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
+                                </p>
+                                <a asp-action="EventDetails" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/2.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>Korola Megna</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/3.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>London</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/4.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>Miami Beach</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/5.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>California</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="single_place">
-                    <div class="thumb">
-                        <img src="~/HomeDesign/img/place/6.png" alt="">
-                        <a href="#" class="prise">$500</a>
-                    </div>
-                    <div class="place_info">
-                        <a href="destination_details.html"><h3>Saintmartine Iceland</h3></a>
-                        <p>United State of America</p>
-                        <div class="rating_days d-flex justify-content-between">
-                            <span class="d-flex justify-content-center align-items-center">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <a href="#">(20 Review)</a>
-                            </span>
-                            <div class="days">
-                                <i class="fa fa-clock-o"></i>
-                                <a href="#">5 Days</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="more_place_btn text-center">
-                    <a class="boxed-btn4" href="#">More Places</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+
+        <!-- newletter_area_end  -->
 
 
 <div class="video_area video_bg overlay">

@@ -36,8 +36,16 @@ namespace HarmonyHotles.Controllers
             return RedirectToAction("Index", "Cities");
         }
 
-      
+        public IActionResult AddEvents()
+        {
+            return RedirectToAction("Index", "Events");
+        }
 
+
+        public IActionResult AddAmenities()
+        {
+            return RedirectToAction("Index", "Amenities");
+        }
 
 
 

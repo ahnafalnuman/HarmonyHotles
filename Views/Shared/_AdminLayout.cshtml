@@ -199,13 +199,26 @@
 
 
                         <li class="submenu">
-                            <a href="javascript:void(0);"><i class="fas fa-globe"></i><span> Countries & Cities page </span> <span class="menu-arrow"></span></a>
+                            <a href="javascript:void(0);"><i class="fas fa-globe"></i><span>Countries & Cities</span> <span class="menu-arrow"></span></a>
                             <ul class="submenu-list" style="display: none;">
                                 <li> <a asp-controller="Admin" asp-action="ManageCountries"><i class="fas fa-globe"></i> Countries </a></li>
                                 <li> <a asp-controller="Admin" asp-action="ManageCities"><i class="fas fa-city"></i> Cities</a></li>
 
                             </ul>
                         </li>
+
+
+                        <!-- Amenities section -->
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fas fa-concierge-bell"></i><span>Amenities & Services</span> <span class="menu-arrow"></span></a>
+                            <ul class="submenu-list" style="display: none;">
+                                <li> <a asp-controller="Admin" asp-action="AddAmenities"><i class="fas fa-hotel"></i> Amenities</a></li>
+                                <li> <a asp-controller="Admin" asp-action="AddServices"><i class="fas fa-hotel"></i> Services</a></li>
+                                @*     <li> <a asp-action="RoomAmenities"><i class="fas fa-bed"></i> Room serviess</a></li> *@
+                            </ul>
+                        </li>
+
+
 
                         <!-- Hotels and Events section -->
                         <li class="submenu">
@@ -225,23 +238,7 @@
                             </ul>
                         </li>
 
-                        <!-- Amenities section -->
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="fas fa-concierge-bell"></i><span> Amenities</span> <span class="menu-arrow"></span></a>
-                            <ul class="submenu-list" style="display: none;">
-                                <li> <a asp-action="HotelAmenities"><i class="fas fa-hotel"></i> Hotel Amenities</a></li>
-                                <li> <a asp-action="RoomAmenities"><i class="fas fa-bed"></i> Room Amenities</a></li>
-                            </ul>
-                        </li>
-
-                        <!-- Services section -->
-                        <li class="submenu">
-                            <a href="javascript:void(0);"><i class="fas fa-concierge-bell"></i><span> Services</span> <span class="menu-arrow"></span></a>
-                            <ul class="submenu-list" style="display: none;">
-                                <li> <a asp-action="HotelServices"><i class="fas fa-hotel"></i> Hotel Services</a></li>
-                                <li> <a asp-action="RoomServices"><i class="fas fa-bed"></i> Room Services</a></li>
-                            </ul>
-                        </li>
+                   
 
                         <!-- Users section -->
                         <li>

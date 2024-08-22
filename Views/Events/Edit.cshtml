@@ -1,0 +1,133 @@
+﻿@model HarmonyHotles.Models.Event
+
+@{
+    ViewData["Title"] = "Edit Event";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Edit Event</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Eventid" />
+
+                <!-- Display and select options for country, city, and hotel -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Country</label>
+                    <select asp-for="Countryid" class="form-select shadow-sm" asp-items="ViewBag.Countryid" onchange="this.form.submit();"></select>
+                    <span asp-validation-for="Countryid" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">City</label>
+                    <select asp-for="Cityid" class="form-select shadow-sm" asp-items="ViewBag.Cityid" onchange="this.form.submit();"></select>
+                    <span asp-validation-for="Cityid" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Hotel</label>
+                    <select asp-for="Hotelid" class="form-select shadow-sm" asp-items="ViewBag.Hotelid"></select>
+                    <span asp-validation-for="Hotelid" class="text-danger"></span>
+                </div>
+
+                <!-- Display event details -->
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold">Event Name</label>
+                    <input asp-for="Name" class="form-control shadow-sm" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Eventsdescription" class="form-label fw-bold">Description</label>
+                    <textarea asp-for="Eventsdescription" class="form-control shadow-sm" rows="3"></textarea>
+                    <span asp-validation-for="Eventsdescription" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label fw-bold">Location</label>
+                    <input asp-for="Location" class="form-control shadow-sm" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Ticketprice" class="form-label fw-bold">Ticket Price</label>
+                    <input asp-for="Ticketprice" class="form-control shadow-sm" />
+                    <span asp-validation-for="Ticketprice" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Timefrom" class="form-label fw-bold">Start Time</label>
+                    <input asp-for="Timefrom" class="form-control shadow-sm" />
+                    <span asp-validation-for="Timefrom" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Timeto" class="form-label fw-bold">End Time</label>
+                    <input asp-for="Timeto" class="form-control shadow-sm" />
+                    <span asp-validation-for="Timeto" class="text-danger"></span>
+                </div>
+
+                <!-- عرض الصور الحالية كسلايدر -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Current Images</label>
+                    <div id="carouselEventImages" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @if (Model.Images.Any())
+                            {
+                                var firstImage = true;
+                                foreach (var image in Model.Images)
+                                {
+                                    <div class="carousel-item @(firstImage ? "active" : "")">
+                                        <img src="~/images/events/@image.Imagepath" class="d-block w-100" alt="Event Image" style="height: 300px; object-fit: cover;">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <!-- خيار لتحميل صورة جديدة لتحل محل الصورة الحالية -->
+                                            <input type="file" name="replaceImageIds[@image.Imageid]" class="form-control mb-2" />
+                                            <!-- خيار لحذف الصورة -->
+                                            <div class="form-check">
+                                                <input type="checkbox" name="deleteImageIds" value="@image.Imageid" class="form-check-input" id="deleteImage_@image.Imageid">
+                                                <label class="form-check-label text-danger" for="deleteImage_@image.Imageid">Delete</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    firstImage = false;
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="https://via.placeholder.com/800x300?text=No+Image+Available" class="d-block w-100" alt="No Image Available" style="height: 300px; object-fit: cover;">
+                                </div>
+                            }
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselEventImages" role="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselEventImages" role="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- إضافة صور جديدة -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Upload New Images</label>
+                    <input type="file" name="newImages" multiple class="form-control shadow-sm" />
+                </div>
+
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-success px-5 shadow-sm" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Back to List</a>
+    </div>
+</div>

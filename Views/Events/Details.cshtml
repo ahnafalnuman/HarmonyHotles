@@ -1,0 +1,60 @@
+﻿@model HarmonyHotles.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Event Details</h3>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3 fw-bold">Event Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+                <dt class="col-sm-3 fw-bold">Description</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Eventsdescription)</dd>
+
+                <dt class="col-sm-3 fw-bold">Location</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Location)</dd>
+
+                <dt class="col-sm-3 fw-bold">Ticket Price</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Ticketprice)</dd>
+
+                <dt class="col-sm-3 fw-bold">Start Time</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Timefrom)</dd>
+
+                <dt class="col-sm-3 fw-bold">End Time</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Timeto)</dd>
+
+                <dt class="col-sm-3 fw-bold">City</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Cityname)</dd>
+
+                <dt class="col-sm-3 fw-bold">Country</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Country.Countryname)</dd>
+
+                <dt class="col-sm-3 fw-bold">Hotel</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Hotel.Name)</dd>
+
+                <dt class="col-sm-3 fw-bold">Event Images</dt>
+                <dd class="col-sm-9">
+                    <div class="row">
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="col-md-3 mb-3">
+                                <img src="~/images/events/@image.Imagepath" class="img-fluid rounded shadow-sm" alt="Event Image" />
+                            </div>
+                        }
+                    </div>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center">
+            <a asp-action="Edit" asp-route-id="@Model?.Eventid" class="btn btn-warning me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

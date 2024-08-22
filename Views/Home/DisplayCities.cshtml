@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HarmonyHotles.Models.City>
+﻿@* @model IEnumerable<HarmonyHotles.Models.City> *@
 @{
 
     Layout = "~/Views/Shared/_GustLayout.cshtml";
@@ -59,6 +59,8 @@
 
 
 </style>
+
+
 <div class="view-all-cities-container text-center mt-5">
     <a  asp-controller="Home" asp-action="DisplayAllCities" class="btn-view-all-cities">
         <span class="btn-icon">&#x1F4CD;</span>
@@ -90,15 +92,21 @@
                         <div class="content">
                             <p class="d-flex align-items-center">
                                 @city.Cityname
-                                <a asp-controller="Home" asp-action="DisplayHotels" asp-route-cityId="@city.Cityid">
+                                <a asp-controller="Home" asp-action="DisplayHotelsInCity" asp-route-cityId="@city.Cityid">
                                     <span> (@city.Hotels.Count) Hotels</span>
                                 </a>
-                            </p>
+                                <a asp-controller="Home" asp-action="DisplayEventInCity" asp-route-id="@city.Cityid">
+                                    <span> (@city.Events.Count) Events</span>
+                                </a>
+
                         </div>
                     </div>
                 </div>
             }
         </div>
+
+
+
     </div>
 </div>
 
