@@ -46,6 +46,7 @@ namespace HarmonyHotles.Controllers
 
         public IActionResult DisplayCities(int countryId)
         {
+            var images = _context.Images.ToListAsync();
             var country = _context.Countries
                                   .Include(c => c.Cities)
                                   .ThenInclude(city => city.Hotels)
@@ -63,11 +64,12 @@ namespace HarmonyHotles.Controllers
             return View(country.Cities);
         }
 
-        public IActionResult DisplayEventInCity(int id)
+        public async Task<IActionResult> DisplayEventInCity(int id)
         {
-            var city = _context.Cities
-                .Include(c => c.Events)  // تضمين الفعاليات المرتبطة بالمدينة
-                .FirstOrDefault(c => c.Cityid == id);
+            var city = await _context.Cities
+                .Include(c => c.Events)
+                .ThenInclude(e => e.Images) // تأكد من تضمين الصور المرتبطة بكل حدث
+                .FirstOrDefaultAsync(c => c.Cityid == id);
 
             if (city == null)
             {
@@ -76,6 +78,7 @@ namespace HarmonyHotles.Controllers
 
             return View(city.Events);  // تمرير قائمة الفعاليات إلى العرض
         }
+
 
         public IActionResult DisplayAllCountries()
         {

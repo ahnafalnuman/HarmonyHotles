@@ -6,6 +6,35 @@
 
     }
 
+<style>
+    h3 {
+        text-align: center;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+    .fa-heart {
+        font-size: 1.5rem;
+        background: white;
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .card-body h5 {
+        font-weight: bold;
+    }
+
+    .card-body p {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
 
 <div class="col-lg-6">
     <div class="section_title text-center mb-4">
@@ -35,7 +64,7 @@
                         <p class="card-text fw-bold">
                             <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
                         </p>
-                        <a asp-action="Details" asp-controller="Events" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
+                        <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
@@ -43,33 +72,6 @@
     </div>
 </div>
 
-<style>
-    h3 {
-        text-align: center;
-    }
 
-    .card {
-        transition: transform 0.2s ease-in-out;
-    }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-    .fa-heart {
-        font-size: 1.5rem;
-        background: white;
-        padding: 5px;
-        border-radius: 50%;
-    }
-
-    .card-body h5 {
-        font-weight: bold;
-    }
-
-    .card-body p {
-        margin-bottom: 0.5rem;
-    }
-</style>
 
 

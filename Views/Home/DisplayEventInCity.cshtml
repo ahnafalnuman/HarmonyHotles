@@ -4,61 +4,35 @@
     Layout = "~/Views/Shared/_GustLayout.cshtml";
 }
 
-<style>
-    .view-all-cities-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 50px;
+@* <style>
+    h3 {
+        text-align: center;
     }
 
-    .btn-view-all-cities {
-        display: inline-block;
-        padding: 15px 30px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        text-transform: uppercase;
-        color: #fff;
-        background-color: #3498db;
-        border-radius: 50px;
-        text-decoration: none;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        position: relative;
+    .card {
+        transition: transform 0.2s ease-in-out;
     }
 
-        .btn-view-all-cities:hover {
-            background-color: #2980b9;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        .card:hover {
+            transform: translateY(-10px);
         }
 
-    .btn-icon {
-        margin-right: 10px;
-        font-size: 1.8rem;
-        vertical-align: middle;
+    .fa-heart {
+        font-size: 1.5rem;
+        background: white;
+        padding: 5px;
+        border-radius: 50%;
     }
 
-    .btn-view-all-cities::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        border-radius: 50px;
-        background: linear-gradient(45deg, #ff6b6b, #f09433, #3498db);
-        z-index: -1;
-        transition: opacity 0.3s ease;
-        opacity: 0;
+    .card-body h5 {
+        font-weight: bold;
     }
 
-    .btn-view-all-cities:hover::before {
-        opacity: 1;
+    .card-body p {
+        margin-bottom: 0.5rem;
     }
-
 </style>
-
+ *@
 <div class="view-all-cities-container text-center mt-5">
     <a asp-controller="Home" asp-action="DisplayAllCities" class="btn-view-all-cities">
         <span class="btn-icon">&#x1F4CD;</span>
@@ -78,9 +52,8 @@
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
                     <!-- صورة الفعالية -->
-                    <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
-                    <!-- أيقونة القلب -->
-                    <a asp-action="AddToFavorites" asp-controller="Events" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
+                    <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">                    <!-- أيقونة القلب -->
+                    <a asp-action="AddToFavorites" asp-controller="Home" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
                         <i class="far fa-heart text-danger"></i>
                     </a>
 
@@ -93,7 +66,7 @@
                         <p class="card-text fw-bold">
                             <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
                         </p>
-                        <a asp-action="Details" asp-controller="Events" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
+                        <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
