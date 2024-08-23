@@ -67,14 +67,14 @@ namespace HarmonyHotles.Controllers
             {
                 try
                 {
-                    // التحقق من حالة الفعالية
+                 
                     if (@event.Status == "Permanent")
                     {
                         @event.Timefrom = null;
                         @event.Timeto = null;
                     }
 
-                    // حفظ الفعالية أولاً
+             
                     _context.Add(@event);
                     await _context.SaveChangesAsync();
 

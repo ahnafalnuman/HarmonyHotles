@@ -47,18 +47,18 @@
             </div>
             <div class="col-lg-9">
                 <div class="search_wrap">
-                    <form class="search_form" asp-action="Search" asp-controller="Home" method="post">
+                    <form class="search_form" asp-action="Index" asp-controller="Home" method="post">
                         <div class="input_field">
-                            <input type="text" @* asp-for="Destination" *@ placeholder="Where to go?" />
+                            <input type="text" name="destination" placeholder="Where to go?" class="form-control" />
                         </div>
                         <div class="input_field">
-                            <input type="date" @* asp-for="StartDate" *@ id="datepickerStart" placeholder="Date from" />
+                            <input type="date" name="startDate" class="form-control" placeholder="Date from" />
                         </div>
                         <div class="input_field">
-                            <input type="date" @* asp-for="EndDate" *@ id="datepickerEnd" placeholder="Date to" />
+                            <input type="date" name="endDate" class="form-control" placeholder="Date to" />
                         </div>
                         <div class="search_btn">
-                            <button class="boxed-btn4" type="submit">Search</button>
+                            <button class="boxed-btn4 btn btn-primary" type="submit">Search</button>
                         </div>
                     </form>
                 </div>
@@ -66,6 +66,7 @@
         </div>
     </div>
 </div>
+
 
 
 <!-- where_togo_area_end  -->
@@ -125,7 +126,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
                             <!-- صورة الفعالية -->
-                            <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                            <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" asp-append-version="true" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
                             <!-- أيقونة القلب -->
                             <a asp-action="AddToFavorites" asp-controller="Events" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
                                 <i class="far fa-heart text-danger"></i> <!-- هنا قمنا بتغيير fa-solid إلى far -->
@@ -140,7 +141,7 @@
                                 <p class="card-text fw-bold">
                                     <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
                                 </p>
-                                <a asp-action="EventDetails" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
+                                <a asp-action="Events" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
                             </div>
                         </div>
                     </div>
@@ -205,63 +206,7 @@
 </div>
 
 
-<!-- testimonial_area  -->
-<div class="testimonial_area">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="testmonial_active owl-carousel">
-                    <div class="single_carousel">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="single_testmonial text-center">
-                                    <div class="author_thumb">
-                                        <img src="~/HomeDesign/img/testmonial/author.png" alt="">
-                                    </div>
-                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
-                                    <div class="testmonial_author">
-                                        <h3>- Micky Mouse</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single_carousel">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="single_testmonial text-center">
-                                    <div class="author_thumb">
-                                        <img src="~/HomeDesign/img/testmonial/author.png" alt="">
-                                    </div>
-                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
-                                    <div class="testmonial_author">
-                                        <h3>- Tom Mouse</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single_carousel">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="single_testmonial text-center">
-                                    <div class="author_thumb">
-                                        <img src="~/HomeDesign/img/testmonial/author.png" alt="">
-                                    </div>
-                                    <p>"Working in conjunction with humanitarian aid agencies, we have supported programmes to help alleviate human suffering.</p>
-                                    <div class="testmonial_author">
-                                        <h3>- Jerry Mouse</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /testimonial_area  -->
+
 
 
 <div class="recent_trip_area">

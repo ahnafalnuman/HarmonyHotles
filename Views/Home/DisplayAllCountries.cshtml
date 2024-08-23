@@ -18,7 +18,7 @@
                 <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
                     <div class="exclusive-card">
                         <div class="thumb">
-                            <img src="@Url.Content("~/images/Countries/" + country.Imagepath)" alt="@country.Countryname" class="card-img-top">
+                            <img src="@Url.Content("~/images/Countries/" + country.Imagepath)" alt="@country.Countryname" class="card-img-top" asp-append-version="true">
                         </div>
                         <div class="content">
                             <h5 class="card-title">@country.Countryname</h5>

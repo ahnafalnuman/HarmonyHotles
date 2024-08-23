@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 
 namespace HarmonyHotles.Controllers
 {
@@ -18,6 +19,7 @@ namespace HarmonyHotles.Controllers
             _context = context; 
         }
 
+        [HttpGet]   
         public async Task<IActionResult> Index()
         {
             var sliders = await _context.Sliders.ToListAsync();
@@ -37,6 +39,64 @@ namespace HarmonyHotles.Controllers
 
             return View(models);
         }
+        [HttpPost]
+        public async Task<IActionResult> Index(string destination, DateTime? startDate, DateTime? endDate)
+        {
+            var sliders = await _context.Sliders.ToListAsync();
+            var countries = await _context.Countries
+                                          .Include(c => c.Cities)
+                                          .ThenInclude(city => city.Hotels)
+                                          .Include(c => c.Cities)
+                                          .ThenInclude(city => city.Events)
+                                          .ToListAsync();
+
+            var cities = await _context.Cities
+                                       .Include(city => city.Hotels)
+                                       .Include(city => city.Events)
+                                       .ToListAsync();
+
+            var hotels = await _context.Hotels
+                                       .Include(h => h.City)
+                                       .Include(h => h.Country)
+                                       .ToListAsync();
+
+            var events = await _context.Events
+                                       .Include(e => e.City)
+                                       .Include(e => e.Country)
+                                       .Include(e => e.Hotel)
+                                       .Include(e => e.Images)
+                                       .ToListAsync();
+
+            var images = await _context.Images.ToListAsync();
+            var favorites = await _context.Favorites.ToListAsync();
+
+            // Filtering based on destination, start date, and end date
+            if (!string.IsNullOrEmpty(destination))
+            {
+                var lowerDestination = destination.ToLower();
+
+                countries = countries.Where(c => c.Countryname.ToLower().Contains(lowerDestination)).ToList();
+                cities = cities.Where(c => c.Cityname.ToLower().Contains(lowerDestination)).ToList();
+                events = events.Where(e =>
+                    (e.City != null && e.City.Cityname.ToLower().Contains(lowerDestination)) ||
+                    (e.Country != null && e.Country.Countryname.ToLower().Contains(lowerDestination)) ||
+                    (e.Hotel != null && e.Hotel.Name.ToLower().Contains(lowerDestination)) ||
+                    e.Name.ToLower().Contains(lowerDestination)).ToList();
+            }
+
+            if (startDate.HasValue || endDate.HasValue)
+            {
+                events = events.Where(e =>
+                    (!startDate.HasValue || e.Timefrom >= startDate.Value) &&
+                    (!endDate.HasValue || e.Timeto <= endDate.Value)).ToList();
+            }
+
+            var models = Tuple.Create<IEnumerable<Slider>, IEnumerable<Country>, IEnumerable<City>, IEnumerable<Hotel>, IEnumerable<Event>, IEnumerable<Image>, IEnumerable<Favorite>>
+                (sliders, countries, cities, hotels, events, images, favorites);
+
+            return View(models);
+        }
+
 
 
         public IActionResult Privacy()
@@ -68,15 +128,15 @@ namespace HarmonyHotles.Controllers
         {
             var city = await _context.Cities
                 .Include(c => c.Events)
-                .ThenInclude(e => e.Images) // تأكد من تضمين الصور المرتبطة بكل حدث
+                .ThenInclude(e => e.Images) 
                 .FirstOrDefaultAsync(c => c.Cityid == id);
 
             if (city == null)
             {
-                return NotFound();  // العودة بصفحة 404 إذا لم يتم العثور على المدينة
+                return NotFound(); 
             }
 
-            return View(city.Events);  // تمرير قائمة الفعاليات إلى العرض
+            return View(city.Events);  
         }
 
 
@@ -98,26 +158,94 @@ namespace HarmonyHotles.Controllers
             return View(cities);
         }
 
+        // GET: Display all events
+        [HttpGet]
         public IActionResult DisplayAllEvent()
         {
             var events = _context.Events
-         .Include(e => e.City)
-         .Include(e => e.Country)
-         .Include(e => e.Hotel)
-         .Include(e => e.Images)
-         .ToList();
+                .Include(e => e.City)
+                .Include(e => e.Country)
+                .Include(e => e.Hotel)
+                .Include(e => e.Images)
+                .ToList();
 
             return View(events);
         }
 
-
-      /*  public async Task<IActionResult> PopularDestinations()
+        // POST: Apply filters to events
+        [HttpPost]
+        public IActionResult DisplayAllEvent(string destination, DateTime? startDate, DateTime? endDate)
         {
-            var destinations = await _context.Destinations.ToListAsync();
+            var events = _context.Events
+                .Include(e => e.City)
+                .Include(e => e.Country)
+                .Include(e => e.Hotel)
+                .Include(e => e.Images)
+                .AsQueryable();
 
-            return View(destinations);
+            // التعامل مع البحث بالحروف الكبيرة والصغيرة
+            if (!string.IsNullOrEmpty(destination))
+            {
+                var lowerDestination = destination.ToLower();
+                events = events.Where(e =>
+                    (e.City.Cityname.ToLower().Contains(lowerDestination)) ||
+                    (e.Country.Countryname.ToLower().Contains(lowerDestination)) ||
+                    (e.Hotel.Name.ToLower().Contains(lowerDestination)) ||
+                    (e.Name.ToLower().Contains(lowerDestination)));
+            }
+
+            // التعامل مع التواريخ
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                events = events.Where(e => e.Timefrom >= startDate.Value && e.Timeto <= endDate.Value);
+            }
+            else if (startDate.HasValue)
+            {
+                events = events.Where(e => e.Timefrom >= startDate.Value);
+            }
+            else if (endDate.HasValue)
+            {
+                events = events.Where(e => e.Timeto <= endDate.Value);
+            }
+
+            return View(events.ToList());
         }
-*/
+
+
+
+        public IActionResult Events(int id)
+        {
+            
+            var eventDetails = _context.Events
+                .Include(e => e.Images) 
+                .FirstOrDefault(e => e.Eventid == id); 
+
+            if (eventDetails == null)
+            {
+                return NotFound();
+            }
+       
+            var coordinates = eventDetails.Location?.Split(',');
+            string latitude = coordinates != null && coordinates.Length > 0 ? coordinates[0] : "0";
+            string longitude = coordinates != null && coordinates.Length > 1 ? coordinates[1] : "0";
+
+            ViewBag.Latitude = latitude;
+            ViewBag.Longitude = longitude;
+
+            return View(eventDetails);
+        }
+
+
+
+
+
+        /*  public async Task<IActionResult> PopularDestinations()
+          {
+              var destinations = await _context.Destinations.ToListAsync();
+
+              return View(destinations);
+          }
+  */
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

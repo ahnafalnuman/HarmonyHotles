@@ -18,7 +18,7 @@
                 <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
                     <div class="exclusive-card">
                         <div class="thumb">
-                            <img src="@Url.Content("~/images/Cities/" + city.Imagepath)" alt="@city.Cityname" class="card-img-top">
+                            <img src="@Url.Content("~/images/Cities/" + city.Imagepath)" alt="@city.Cityname" class="card-img-top" asp-append-version="true">
                         </div>
                         <div class="content">
                             <h5 class="card-title">@city.Cityname</h5>
@@ -33,7 +33,8 @@
                                 </span>
                             </p>
                             <a asp-controller="Home" asp-action="DisplayHotels" asp-route-cityId="@city.Cityid" class="btn btn-primary">View Hotels</a>
-                            <a asp-controller="Home" asp-action="DisplayEventInCity" asp-route-id="@city.Cityid" class="btn btn-primary">  <span> (@city.Events.Count) Events</span>
+                            <a asp-controller="Home" asp-action="Events " asp-route-id="@city." class="btn btn-primary">
+                                <span> (@city.Events.Count) Events</span>
                             </a>
                         </div>
                     </div>

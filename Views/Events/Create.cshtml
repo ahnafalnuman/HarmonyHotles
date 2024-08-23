@@ -45,11 +45,16 @@
                         <span asp-validation-for="Eventsdescription" class="text-danger"></span>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Location" class="form-label fw-bold">Location</label>
-                        <input asp-for="Location" class="form-control border-2 shadow-sm" placeholder="Enter event location" />
+                
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Location" class="form-label fw-bold">Google Maps Link</label>
+                        <input asp-for="Location" class="form-control border-2 shadow-sm" placeholder="Enter latitude,latitude example  252522,525252" />
                         <span asp-validation-for="Location" class="text-danger"></span>
                     </div>
+
+
+
+
 
                     <div class="col-md-6 mb-3">
                         <label asp-for="Ticketprice" class="form-label fw-bold">Ticket Price</label>
