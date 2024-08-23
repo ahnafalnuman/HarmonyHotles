@@ -117,6 +117,7 @@
                 </div>
             </div>
         </div>
+       
         <div class="container mt-4">
             <div class="row">
                 @foreach (var item in Model.Item5)
@@ -134,7 +135,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">@item.Name</h5>
                                 <p class="card-text">
-                                    <i class="fas fa-map-marker-alt text-primary"></i> @item.City.Cityname
+                                    <i class="fas fa-map-marker-alt text-primary"></i> @(item.City != null ? item.City.Cityname : " no city")
                                 </p>
                                 <p class="card-text fw-bold">
                                     <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
@@ -146,8 +147,8 @@
                 }
             </div>
         </div>
-
-
+    </div>
+</div>
         <!-- newletter_area_end  -->
 
 

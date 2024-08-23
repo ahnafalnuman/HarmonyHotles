@@ -30,7 +30,7 @@
             @Html.DisplayNameFor(model => model.Country)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Countryname)
+            @(Model.Country !=null ?  Model.Country.Countryname : " country name ")
         </dd>
     </dl>
     

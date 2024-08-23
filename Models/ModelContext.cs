@@ -405,6 +405,10 @@ public partial class ModelContext : DbContext
                 .HasColumnType("DATE")
                 .HasColumnName("TIMETO");
 
+            entity.Property(e => e.Status)
+                .HasMaxLength(20)
+                .HasColumnName("STATUS");
+
             entity.HasOne(d => d.City).WithMany(p => p.Events)
                 .HasForeignKey(d => d.Cityid)
                 .HasConstraintName("SYS_C009844");
@@ -849,6 +853,9 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.Roomtypeid)
                 .HasColumnType("NUMBER(38)")
                 .HasColumnName("ROOMTYPEID");
+            entity.Property(e => e.Status)
+               .HasMaxLength(20)
+               .HasColumnName("STATUS");
 
             entity.HasOne(d => d.Hotel).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.Hotelid)
@@ -925,7 +932,10 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.Serviceprice)
                 .HasColumnType("NUMBER(10,2)")
                 .HasColumnName("SERVICEPRICE");
-        });
+            entity.Property(e => e.Status)
+               .HasMaxLength(20)
+               .HasColumnName("STATUS");
+                    });
 
         modelBuilder.Entity<Slider>(entity =>
         {

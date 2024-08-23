@@ -30,8 +30,9 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Hotel</label>
-                    <select asp-for="Hotelid" class="form-select shadow-sm" asp-items="ViewBag.Hotelid"></select>
-                    <span asp-validation-for="Hotelid" class="text-danger"></span>
+                    <select asp-for="Hotelid" class="form-select shadow-sm" asp-items="ViewBag.Hotelid">
+                        <option value=""> a Hotel (Optional) --</option>
+                    </select>
                 </div>
 
                 <!-- Display event details -->
@@ -59,18 +60,28 @@
                     <span asp-validation-for="Ticketprice" class="text-danger"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Timefrom" class="form-label fw-bold">Start Time</label>
-                    <input asp-for="Timefrom" class="form-control shadow-sm" />
-                    <span asp-validation-for="Timefrom" class="text-danger"></span>
+                <div class="col-md-12 mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isPermanent" name="IsPermanent" />
+                        <label class="form-check-label fw-bold" for="isPermanent">
+                            Is this event permanent (no specific time)?
+                        </label>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Timeto" class="form-label fw-bold">End Time</label>
-                    <input asp-for="Timeto" class="form-control shadow-sm" />
-                    <span asp-validation-for="Timeto" class="text-danger"></span>
-                </div>
+                <div id="timeFields">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Timefrom" class="form-label fw-bold">Start Time</label>
+                        <input asp-for="Timefrom" class="form-control border-2 shadow-sm" placeholder="Select start time" />
+                        <span asp-validation-for="Timefrom" class="text-danger"></span>
+                    </div>
 
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Timeto" class="form-label fw-bold">End Time</label>
+                        <input asp-for="Timeto" class="form-control border-2 shadow-sm" placeholder="Select end time" />
+                        <span asp-validation-for="Timeto" class="text-danger"></span>
+                    </div>
+                </div>
                 <!-- عرض الصور الحالية كسلايدر -->
                 <div class="mb-3">
                     <label class="form-label fw-bold">Current Images</label>

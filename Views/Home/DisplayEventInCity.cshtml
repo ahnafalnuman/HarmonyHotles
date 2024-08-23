@@ -42,7 +42,7 @@
 <div class="container mt-4">
     <div class="col-lg-6">
         <div class="section_title text-center mb-4">
-            <h3 class="all-cities-title">Events in @Model.FirstOrDefault()?.City.Cityname</h3>
+            <h3 class="all-cities-title">Events in @Model.FirstOrDefault()??.City.Cityname</h3>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@item.Name</h5>
                         <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> @item.City.Cityname
+                            <i class="fas fa-map-marker-alt text-primary"></i> @(item.City != null ? item.City.Cityname : " no city" ) 
                         </p>
                         <p class="card-text fw-bold">
                             <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD

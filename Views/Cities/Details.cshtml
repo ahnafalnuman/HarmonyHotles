@@ -29,7 +29,8 @@
             @Html.DisplayNameFor(model => model.Country)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country.Countryid)
+        <dd class="col-sm-10">
+                @(Model.Country?.Countryid != null ? Model.Country.Countryid.ToString() : "No country associated") 
         </dd>
     </dl>
 </div>

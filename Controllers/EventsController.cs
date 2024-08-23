@@ -15,8 +15,6 @@ namespace HarmonyHotles.Controllers
         private readonly ModelContext _context;
         private readonly IWebHostEnvironment _environment;
 
-
-
         public EventsController(ModelContext context, IWebHostEnvironment environment)
         {
             _context = context;
@@ -26,7 +24,7 @@ namespace HarmonyHotles.Controllers
         // GET: Events
         public async Task<IActionResult> Index()
         {
-            var modelContext = _context.Events.Include(x => x.City).Include(y => y.Country).Include(z => z.Hotel).Include(e => e.Images); ;
+            var modelContext = _context.Events.Include(x => x.City).Include(y => y.Country).Include(z => z.Hotel).Include(e => e.Images);
             return View(await modelContext.ToListAsync());
         }
 
@@ -61,19 +59,21 @@ namespace HarmonyHotles.Controllers
         }
 
         // POST: Events/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // POST: Events/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Eventid,Countryid,Hotelid,Cityid,Name,Eventsdescription,Location,Ticketprice,Timefrom,Timeto")] Event @event, List<IFormFile> images)
+        public async Task<IActionResult> Create([Bind("Eventid,Countryid,Hotelid,Cityid,Name,Eventsdescription,Location,Ticketprice,Timefrom,Timeto,Status")] Event @event, List<IFormFile> images)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // التحقق من حالة الفعالية
+                    if (@event.Status == "Permanent")
+                    {
+                        @event.Timefrom = null;
+                        @event.Timeto = null;
+                    }
+
                     // حفظ الفعالية أولاً
                     _context.Add(@event);
                     await _context.SaveChangesAsync();
@@ -116,37 +116,33 @@ namespace HarmonyHotles.Controllers
                                 }
                                 catch (Exception ex)
                                 {
-                                    // تسجيل الاستثناء أو إظهار رسالة خطأ
+                                    
                                     Console.WriteLine($"Error saving image: {ex.Message}");
                                 }
                             }
                         }
 
-                        // حفظ التغييرات في قاعدة البيانات بعد إضافة الصور
+                       
                         await _context.SaveChangesAsync();
                     }
                 }
                 catch (Exception ex)
                 {
-                    // التعامل مع أي استثناءات قد تحدث
+                 
                     Console.WriteLine($"Error saving event: {ex.Message}");
-                    ModelState.AddModelError("", "حدث خطأ أثناء حفظ الفعالية. يرجى المحاولة مرة أخرى.");
+                    ModelState.AddModelError("", "Error saving event .. Tray aGAIN ");
                 }
 
                 return RedirectToAction(nameof(Index));
             }
 
-            // إعادة عرض النموذج في حال وجود خطأ
+          
             ViewData["Cityid"] = new SelectList(_context.Cities, "Cityid", "Cityname", @event.Cityid);
             ViewData["Countryid"] = new SelectList(_context.Countries, "Countryid", "Countryname", @event.Countryid);
             ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", @event.Hotelid);
             return View(@event);
         }
 
-
-
-
-        // GET: Events/Edit
         // GET: Events/Edit/5
         public async Task<IActionResult> Edit(decimal? id)
         {
@@ -155,16 +151,14 @@ namespace HarmonyHotles.Controllers
                 return NotFound();
             }
 
-            // البحث عن الفعالية
             var @event = await _context.Events
-                                       .Include(e => e.Images) // لجلب الصور المرتبطة بالفعالية
+                                       .Include(e => e.Images)
                                        .FirstOrDefaultAsync(m => m.Eventid == id);
             if (@event == null)
             {
                 return NotFound();
             }
 
-            // إعداد القوائم المنسدلة للمدن، الدول، والفنادق
             ViewData["Cityid"] = new SelectList(_context.Cities, "Cityid", "Cityname", @event.Cityid);
             ViewData["Countryid"] = new SelectList(_context.Countries, "Countryid", "Countryname", @event.Countryid);
             ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", @event.Hotelid);
@@ -172,13 +166,10 @@ namespace HarmonyHotles.Controllers
             return View(@event);
         }
 
-
         // POST: Events/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Eventid,Countryid,Hotelid,Cityid,Name,Eventsdescription,Location,Ticketprice,Timefrom,Timeto")] Event @event, List<IFormFile> newImages, List<decimal> deleteImageIds)
+        public async Task<IActionResult> Edit(decimal id, [Bind("Eventid,Countryid,Hotelid,Cityid,Name,Eventsdescription,Location,Ticketprice,Timefrom,Timeto,Status")] Event @event, List<IFormFile> newImages, List<decimal> deleteImageIds)
         {
             if (id != @event.Eventid)
             {
@@ -189,6 +180,13 @@ namespace HarmonyHotles.Controllers
             {
                 try
                 {
+                    // التحقق من حالة الفعالية
+                    if (@event.Status == "Permanent")
+                    {
+                        @event.Timefrom = null;
+                        @event.Timeto = null;
+                    }
+
                     // تحديث بيانات الفعالية
                     _context.Update(@event);
                     await _context.SaveChangesAsync();
@@ -199,16 +197,14 @@ namespace HarmonyHotles.Controllers
                         foreach (var imageId in deleteImageIds)
                         {
                             var image = await _context.Images.FindAsync(imageId);
-                            if (image != null)
+                            if (image != null! && string.IsNullOrEmpty(image.Imagepath) == false)
                             {
-                                // حذف الصورة من النظام
                                 string imagePath = Path.Combine(_environment.WebRootPath, "images/events", image.Imagepath);
                                 if (System.IO.File.Exists(imagePath))
                                 {
                                     System.IO.File.Delete(imagePath);
                                 }
 
-                                // حذف الصورة من قاعدة البيانات
                                 _context.Images.Remove(image);
                             }
                         }
@@ -261,8 +257,6 @@ namespace HarmonyHotles.Controllers
             return View(@event);
         }
 
-
-
         // GET: Events/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
         {
@@ -275,11 +269,20 @@ namespace HarmonyHotles.Controllers
                 .Include(x => x.City)
                 .Include(y => y.Country)
                 .Include(z => z.Hotel)
+                .Include(e => e.Bookings)
                 .FirstOrDefaultAsync(m => m.Eventid == id);
+
             if (@event == null)
             {
                 return NotFound();
             }
+
+            if (@event.Bookings.Any(b => b.Bookingstatus == "Confirmed"))
+            {
+                ModelState.AddModelError("", "The event cannot be deleted because it is associated with confirmed bookings.");
+                return View(@event);
+            }
+
 
             return View(@event);
         }
@@ -294,38 +297,39 @@ namespace HarmonyHotles.Controllers
                 return Problem("Entity set 'ModelContext.Events' is null.");
             }
 
-            // جلب الفعالية مع الصور المرتبطة بها فقط
             var @event = await _context.Events
                                         .Include(e => e.Images)
+                                        .Include(e => e.Bookings)
                                         .FirstOrDefaultAsync(e => e.Eventid == id);
 
             if (@event != null)
             {
-                // حذف الصور المرتبطة
+                if (@event.Bookings.Any(b => b.Bookingstatus == "Confirmed"))
+                {
+                    ModelState.AddModelError("", "The event cannot be deleted because it is associated with confirmed bookings.");
+                    return RedirectToAction(nameof(Index));
+                }
+
                 if (@event.Images != null)
                 {
                     foreach (var image in @event.Images)
                     {
-                        // حذف الصورة من النظام (الملفات)
                         string imagePath = Path.Combine(_environment.WebRootPath, "images/events", image.Imagepath);
                         if (System.IO.File.Exists(imagePath))
                         {
                             System.IO.File.Delete(imagePath);
                         }
 
-                        // حذف الصورة من قاعدة البيانات
                         _context.Images.Remove(image);
                     }
                 }
 
-                // حذف الفعالية نفسها
                 _context.Events.Remove(@event);
                 await _context.SaveChangesAsync();
             }
 
             return RedirectToAction(nameof(Index));
         }
-
 
         private bool EventExists(decimal id)
         {

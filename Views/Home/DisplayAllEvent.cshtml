@@ -49,7 +49,7 @@
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
                     <!-- صورة الفعالية -->
-                    <img src="~/images/events/@item.Images.FirstOrDefault()?.Imagepath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    <img src="~/images/events/@item.Images.FirstOrDefault()??.Imagepath" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
                     <!-- أيقونة القلب -->
                     <a asp-action="AddToFavorites" asp-controller="Events" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
                         <i class="far fa-heart text-danger"></i>
@@ -59,7 +59,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@item.Name</h5>
                         <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> @item.City.Cityname
+                            <i class="fas fa-map-marker-alt text-primary"></i> @(item.City !=null ? item.City.Cityname : " no city" )
                         </p>
                         <p class="card-text fw-bold">
                             <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD

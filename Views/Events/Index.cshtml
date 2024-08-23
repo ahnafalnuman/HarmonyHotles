@@ -23,12 +23,24 @@
                         <p class="card-text">@item.Eventsdescription</p>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item"><strong>Location:</strong> @item.Location</li>
-                            <li class="list-group-item"><strong>Ticket Price:</strong> @item.Ticketprice?</li>
+                            <li class="list-group-item"><strong>Ticket Price:</strong> @item.Ticketprice</li>
                             <li class="list-group-item"><strong>Time From:</strong> @item.Timefrom</li>
                             <li class="list-group-item"><strong>Time To:</strong> @item.Timeto</li>
-                            <li class="list-group-item"><strong>City:</strong> @item.City.Cityname</li>
-                            <li class="list-group-item"><strong>Country:</strong> @item.Country.Countryname</li>
-                            <li class="list-group-item"><strong>Hotel:</strong> @item.Hotel.Name</li>
+                            <li class="list-group-item">
+                                <strong>City:</strong> @(item.City != null ? item.City.Cityname : "No city associated")
+                            </li>
+
+                            <li class="list-group-item" >
+                                <strong>Country:</strong> @(item.Country != null ? item.Country.Countryname : "No city associated")
+                            </li>
+                            @if (item.Hotel != null)
+                            {
+                                <li class="list-group-item"><strong>Hotel:</strong> @item.Hotel.Name</li>
+                            }
+                            else
+                            {
+                                <li class="list-group-item"><strong>Hotel:</strong> No hotel associated</li>
+                            }
                         </ul>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <div class="btn-group">

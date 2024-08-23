@@ -38,7 +38,7 @@
                 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Country.Countryname)
+                    @(item.Country != null ? item.Country.Countryname : "No country associated")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Cityid">Edit</a> |

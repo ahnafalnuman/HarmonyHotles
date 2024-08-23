@@ -13,6 +13,8 @@ public partial class Service
 
     public string? Imagepath { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
     public virtual ICollection<Hotelservice> Hotelservices { get; set; } = new List<Hotelservice>();

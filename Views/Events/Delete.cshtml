@@ -33,13 +33,13 @@
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Timeto)</dd>
 
                 <dt class="col-sm-3 fw-bold">City</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Cityname)</dd>
+                <dd class="col-sm-9">@(Model.City !=null ?  Model.City.Cityname : " NO CITY")</dd>
 
                 <dt class="col-sm-3 fw-bold">Country</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Country.Countryname)</dd>
+                <dd class="col-sm-9">@(Model.Country !=null ?  Model.Country.Countryname : " NO COUNTRY")</dd>
 
                 <dt class="col-sm-3 fw-bold">Hotel</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Hotel.Name)</dd>
+                <dd class="col-sm-9">@(Model.Hotel != null ? Model.Hotel.Name : " NO HOTEL ")</dd>
             </dl>
 
             <form asp-action="Delete" class="mt-4">

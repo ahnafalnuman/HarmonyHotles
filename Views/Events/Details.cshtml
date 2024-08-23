@@ -31,13 +31,13 @@
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Timeto)</dd>
 
                 <dt class="col-sm-3 fw-bold">City</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.City.Cityname)</dd>
+                <dd class="col-sm-9">@(Model.City != null ? Model.City.Cityname : " No City associated ")</dd>
 
                 <dt class="col-sm-3 fw-bold">Country</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Country.Countryname)</dd>
+                <dd class="col-sm-9">   @(Model.Country != null ? Model.Country.Countryname : "No country associated")</dd>
 
                 <dt class="col-sm-3 fw-bold">Hotel</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Hotel.Name)</dd>
+                <dd class="col-sm-9">@(Model.Hotel != null ? Model.Hotel.Name : "No hotel associated")</dd>
 
                 <dt class="col-sm-3 fw-bold">Event Images</dt>
                 <dd class="col-sm-9">

@@ -21,6 +21,8 @@ public partial class Event
 
     public string Ticketprice { get; set; } = null!;
 
+    public string? Status { get; set; }
+
     public DateTime? Timefrom { get; set; }
 
     public DateTime? Timeto { get; set; }
