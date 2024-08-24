@@ -11,27 +11,65 @@
     <h4>Roomtype</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Typename)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Typename)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Roomtypesdescription)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Roomtypesdescription)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Roomsize)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Roomsize)
         </dd>
     </dl>
 </div>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Roomtypeid">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <h3>Images</h3>
+    @if (Model.Images != null && Model.Images.Count > 0)
+    {
+        <div id="roomtypeImagesCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @{
+                    bool isFirst = true;
+                }
+                @foreach (var image in Model.Images)
+                {
+                    <div class="carousel-item @(isFirst ? "active" : "")">
+                        <img src="@Url.Content(image.Imagepath)" class="d-block w-100" alt="Roomtype Image" asp-append-version ="true" style="height: 400px; object-fit: cover;" />
+                    </div>
+                    isFirst = false;
+                }
+            </div>
+            <a class="carousel-control-prev" href="#roomtypeImagesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#roomtypeImagesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No images available for this roomtype.</p>
+    }
 </div>
+
+<a asp-action="Edit" asp-route-id="@Model?.Roomtypeid">Edit</a> |
+<a asp-action="Index">Back to List</a>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+}

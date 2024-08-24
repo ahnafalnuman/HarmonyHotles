@@ -7,48 +7,82 @@
 
 <h1>Details</h1>
 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 <div>
     <h4>Hotel</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Location)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Location)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Rating)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Rating)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Hotelsdescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Hotelsdescription)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.City)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.City.Cityid)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Country)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Country.Countryid)
         </dd>
     </dl>
 </div>
+
+<div>
+    <h3>Images</h3>
+    @if (Model.Images != null && Model.Images.Count > 0)
+    {
+        <div id="hotelImagesCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                @{
+                    bool isFirst = true;
+                }
+                @foreach (var image in Model.Images)
+                {
+                    <div class="carousel-item @(isFirst ? "active" : "")">
+                        <img src="@Url.Content(image.Imagepath)" class="d-block w-100" alt="Hotel Image" style="height: 400px; object-fit: cover;" />
+                    </div>
+                    isFirst = false;
+                }
+            </div>
+            <a class="carousel-control-prev" href="#hotelImagesCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#hotelImagesCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No images available for this hotel.</p>
+    }
+</div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Hotelid">Edit</a> |
     <a asp-action="Index">Back to List</a>

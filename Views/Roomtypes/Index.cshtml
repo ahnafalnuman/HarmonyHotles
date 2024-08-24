@@ -1,48 +1,39 @@
 ﻿@model IEnumerable<HarmonyHotles.Models.Roomtype>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Roomtypes Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Index</h1>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<h1>Roomtypes</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Typename)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Roomtypesdescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Roomsize)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Typename)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Roomtypesdescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Roomsize)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Roomtypeid">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Roomtypeid">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Roomtypeid">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <!-- عرض الصورة الأولى فقط -->
+                <img src="@item.Images.FirstOrDefault()?.Imagepath" class="card-img-top" asp-append-version="true" alt="Room type image" style="height: 200px; object-fit: cover;">
+              
+
+                <div class="card-body">
+                    <h5 class="card-title">@item.Typename</h5>
+                    <p class="card-text"><strong>Description:</strong> @item.Roomtypesdescription</p>
+                    <p class="card-text"><strong>Room Size:</strong> @item.Roomsize m²</p>
+                    <div class="mt-auto">
+                        <a asp-action="Edit" asp-route-id="@item.Roomtypeid" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Roomtypeid" class="btn btn-sm btn-outline-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Roomtypeid" class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -35,8 +35,6 @@ public partial class Hotel
     public virtual ICollection<Hotelservice> Hotelservices { get; set; } = new List<Hotelservice>();
 
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
-    [NotMapped]
-    public virtual ICollection<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
 
     public virtual ICollection<Room> Rooms { get; set; } = new List<Room>();
 }

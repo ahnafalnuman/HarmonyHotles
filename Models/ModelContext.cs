@@ -10,6 +10,8 @@ public partial class ModelContext : DbContext
     {
     }
 
+
+
     public ModelContext(DbContextOptions<ModelContext> options)
         : base(options)
     {

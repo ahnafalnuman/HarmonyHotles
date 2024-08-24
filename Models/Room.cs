@@ -25,9 +25,7 @@ public partial class Room
 
     public virtual Hotel? Hotel { get; set; }
 
-    public virtual ICollection<Image> Images { get; set; } = new List<Image>();
-    [NotMapped]
-    public virtual ICollection<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
+    public virtual ICollection<Image> Images { get; set; } = new List<Image>(); 
 
     public virtual ICollection<Roomamenity> Roomamenities { get; set; } = new List<Roomamenity>();
 

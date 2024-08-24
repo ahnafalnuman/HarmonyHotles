@@ -1,4 +1,6 @@
+using HarmonyHotles.Data;
 using HarmonyHotles.Models;
+using HarmonyHotles.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace HarmonyHotles
@@ -13,7 +15,10 @@ namespace HarmonyHotles
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ModelContext>(x => x.UseOracle(builder.Configuration.GetConnectionString("HarmonyHotles")));
+           
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseOracle(builder.Configuration.GetConnectionString("HarmonyHotles")));
 
+            builder.Services.AddScoped<HotelService>();  // hotels image
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
