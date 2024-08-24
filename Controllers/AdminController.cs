@@ -7,10 +7,12 @@ namespace HarmonyHotles.Controllers
     public class AdminController : Controller
     {
         private readonly ModelContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public AdminController(ModelContext context)
+        public AdminController(ModelContext context , IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment; 
         }
         public IActionResult Index()
         {

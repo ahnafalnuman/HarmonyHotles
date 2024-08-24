@@ -20,10 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\hotels\" />
     <Folder Include="wwwroot\images\Countries\" />
     <Folder Include="wwwroot\images\cities\" />
     <Folder Include="wwwroot\images\events\" />
+    <Folder Include="wwwroot\images\hotels\" />
+    <Folder Include="wwwroot\images\room\" />
+    <Folder Include="wwwroot\images\roomtype\" />
     <Folder Include="wwwroot\images\sliders\" />
   </ItemGroup>
 
