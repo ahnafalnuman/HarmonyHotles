@@ -56,10 +56,10 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Hotel.Hotelid)
+                @Html.DisplayFor(modelItem => item.Hotel.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Roomtype.Roomtypeid)
+                @Html.DisplayFor(modelItem => item.Roomtype.Typename)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Roomid">Edit</a> |

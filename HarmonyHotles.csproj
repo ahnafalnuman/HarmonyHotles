@@ -24,7 +24,8 @@
     <Folder Include="wwwroot\images\cities\" />
     <Folder Include="wwwroot\images\events\" />
     <Folder Include="wwwroot\images\hotels\" />
-    <Folder Include="wwwroot\images\room\" />
+    <Folder Include="wwwroot\images\Services\" />
+    <Folder Include="wwwroot\images\Room\" />
     <Folder Include="wwwroot\images\Roomtypes\" />
     <Folder Include="wwwroot\images\sliders\" />
   </ItemGroup>

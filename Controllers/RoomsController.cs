@@ -6,22 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HarmonyHotles.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace HarmonyHotles.Controllers
 {
     public class RoomsController : Controller
     {
         private readonly ModelContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public RoomsController(ModelContext context)
+        public RoomsController(ModelContext context , IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         // GET: Rooms
         public async Task<IActionResult> Index()
         {
-            var modelContext = _context.Rooms.Include(r => r.Hotel).Include(r => r.Roomtype);
+            var modelContext = _context.Rooms.Include(r => r.Hotel).Include(r => r.Roomtype).Include(r => r.Images);
             return View(await modelContext.ToListAsync());
         }
 
@@ -35,7 +38,7 @@ namespace HarmonyHotles.Controllers
 
             var room = await _context.Rooms
                 .Include(r => r.Hotel)
-                .Include(r => r.Roomtype)
+                .Include(r => r.Images)
                 .FirstOrDefaultAsync(m => m.Roomid == id);
             if (room == null)
             {
@@ -48,8 +51,8 @@ namespace HarmonyHotles.Controllers
         // GET: Rooms/Create
         public IActionResult Create()
         {
-            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Hotelid");
-            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Roomtypeid");
+            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name");
+            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Typename");
             return View();
         }
 
@@ -58,16 +61,36 @@ namespace HarmonyHotles.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Roomid,Hotelid,Roomtypeid,Roomnumber,Isavailable,Bedtype,Price,Status")] Room room)
+        public async Task<IActionResult> Create([Bind("Roomid,Hotelid,Roomtypeid,Roomnumber,Isavailable,Bedtype,Price,Status")] Room room, List<IFormFile> imageFiles)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(room);
                 await _context.SaveChangesAsync();
+
+                if (imageFiles?.Count > 0)
+                {
+                    foreach (var imageFile in imageFiles.Where(f => f.Length > 0))
+                    {
+                        var filePath = Path.Combine(_environment.WebRootPath, "images/Room", imageFile.FileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(stream);
+                        }
+
+                        _context.Images.Add(new Image
+                        {
+                            Imagepath = "/images/Room/" + imageFile.FileName,
+                            Roomid = room.Roomid
+                        });
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Hotelid", room.Hotelid);
-            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Roomtypeid", room.Roomtypeid);
+            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", room.Hotelid);
+            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Typename", room.Roomtypeid);
             return View(room);
         }
 
@@ -79,13 +102,15 @@ namespace HarmonyHotles.Controllers
                 return NotFound();
             }
 
-            var room = await _context.Rooms.FindAsync(id);
+            var room = await _context.Rooms
+                                     .Include(h => h.Images)
+                                      .FirstOrDefaultAsync(m => m.Roomid == id);
             if (room == null)
             {
                 return NotFound();
             }
-            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Hotelid", room.Hotelid);
-            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Roomtypeid", room.Roomtypeid);
+            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", room.Hotelid);
+            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Typename", room.Roomtypeid);
             return View(room);
         }
 
@@ -94,7 +119,7 @@ namespace HarmonyHotles.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(decimal id, [Bind("Roomid,Hotelid,Roomtypeid,Roomnumber,Isavailable,Bedtype,Price,Status")] Room room)
+        public async Task<IActionResult> Edit(decimal id, [Bind("Roomid,Hotelid,Roomtypeid,Roomnumber,Isavailable,Bedtype,Price,Status")] Room room , List<IFormFile> imageFiles)
         {
             if (id != room.Roomid)
             {
@@ -107,6 +132,36 @@ namespace HarmonyHotles.Controllers
                 {
                     _context.Update(room);
                     await _context.SaveChangesAsync();
+
+                    var oldImages = await _context.Images.Where(i => i.Roomid == room.Roomid).ToListAsync();
+
+                    if (imageFiles?.Count > 0)
+                    {
+                        foreach (var oldImage in oldImages)
+                        {
+                            var oldFilePath = Path.Combine(_environment.WebRootPath, oldImage.Imagepath.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath)) System.IO.File.Delete(oldFilePath);
+                        }
+
+                        _context.Images.RemoveRange(oldImages);
+
+                        foreach (var imageFile in imageFiles.Where(f => f.Length > 0))
+                        {
+                            var filePath = Path.Combine(_environment.WebRootPath, "images/Room", imageFile.FileName);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await imageFile.CopyToAsync(stream);
+                            }
+
+                            _context.Images.Add(new Image
+                            {
+                                Imagepath = "/images/Room/" + imageFile.FileName,
+                                Roomid = room.Roomid
+                            });
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -121,8 +176,8 @@ namespace HarmonyHotles.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Hotelid", room.Hotelid);
-            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Roomtypeid", room.Roomtypeid);
+            ViewData["Hotelid"] = new SelectList(_context.Hotels, "Hotelid", "Name", room.Hotelid);
+            ViewData["Roomtypeid"] = new SelectList(_context.Roomtypes, "Roomtypeid", "Typename", room.Roomtypeid);
             return View(room);
         }
 

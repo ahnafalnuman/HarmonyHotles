@@ -1,0 +1,56 @@
+﻿@model IEnumerable<HarmonyHotles.Models.Service>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Servicename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serviceprice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagepath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servicename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serviceprice)
+            </td>
+            <td>
+                   <img src=@Url.Content("~/images/Services/"+ item.Imagepath )
+                     asp-append-version="true" style="border-radius:15%"
+                     width="200" height="200"/>
+            </td>
+                
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Servicesid">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Servicesid">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Servicesid">Delete</a>
+            </td>
+        </tr>
+}
+</table>

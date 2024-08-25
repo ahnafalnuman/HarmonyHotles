@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HarmonyHotles.Models;
 
@@ -15,9 +16,19 @@ public partial class Service
 
     public string? Status { get; set; }
 
+    [NotMapped]
+    public virtual IFormFile? ImageFile { get; set; }
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
-
     public virtual ICollection<Hotelservice> Hotelservices { get; set; } = new List<Hotelservice>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 }
+
+
+
+
+
+
+
+
+

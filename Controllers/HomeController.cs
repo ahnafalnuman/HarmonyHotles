@@ -183,7 +183,7 @@ namespace HarmonyHotles.Controllers
                 .Include(e => e.Images)
                 .AsQueryable();
 
-            // التعامل مع البحث بالحروف الكبيرة والصغيرة
+            
             if (!string.IsNullOrEmpty(destination))
             {
                 var lowerDestination = destination.ToLower();
@@ -194,7 +194,7 @@ namespace HarmonyHotles.Controllers
                     (e.Name.ToLower().Contains(lowerDestination)));
             }
 
-            // التعامل مع التواريخ
+      
             if (startDate.HasValue && endDate.HasValue)
             {
                 events = events.Where(e => e.Timefrom >= startDate.Value && e.Timeto <= endDate.Value);
@@ -236,7 +236,83 @@ namespace HarmonyHotles.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult DisplayAllHotels()
+        {
+            var hotels = _context.Hotels
+                .Include(h => h.City)
+                .Include(h => h.Country)
+                .Include(h => h.Images)
+                .ToList();
 
+            return View(hotels);
+        }
+
+
+              [HttpPost]
+            /*public IActionResult DisplayAllHotels(string country, string city, int? rating)
+            {
+                var hotels = _context.Hotels
+                    .Include(h => h.Country)
+                    .Include(h => h.City)
+                    .Include(h => h.Images);
+
+                if (!string.IsNullOrEmpty(country))
+                {
+                    hotels = hotels.Where(h => h.Country.Countryid == country);
+                }
+
+                if (!string.IsNullOrEmpty(city))
+                {
+                    hotels = hotels.Where(h => h.City.Cityid == city);
+                }
+
+                if (rating.HasValue)
+                {
+                    hotels = hotels.Where(h => h.Rating == rating);
+                }
+
+                var countries = _context.Countries.ToList();
+                var cities = _context.Cities.ToList();
+
+                var viewModel = new HotelFilterViewModel
+                {
+                    Hotels = hotels.ToList(),
+                    Countries = countries,
+                    Cities = cities
+                };
+
+                return View(viewModel);
+            }*/
+    
+
+
+
+
+
+
+        /*   public IActionResult Hotels(int id)
+           {
+
+               var eventDetails = _context.Events
+                   .Include(e => e.Images)
+                   .FirstOrDefault(e => e.Eventid == id);
+
+               if (eventDetails == null)
+               {
+                   return NotFound();
+               }
+
+               var coordinates = eventDetails.Location?.Split(',');
+               string latitude = coordinates != null && coordinates.Length > 0 ? coordinates[0] : "0";
+               string longitude = coordinates != null && coordinates.Length > 1 ? coordinates[1] : "0";
+
+               ViewBag.Latitude = latitude;
+               ViewBag.Longitude = longitude;
+
+               return View(eventDetails);
+           }
+   */
 
 
         /*  public async Task<IActionResult> PopularDestinations()

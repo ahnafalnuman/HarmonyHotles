@@ -68,39 +68,39 @@ namespace HarmonyHotles.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(roomtype);
-                await _context.SaveChangesAsync();  // احفظ نوع الغرفة أولاً
+                await _context.SaveChangesAsync();  
 
-                // تحقق من وجود صور للإضافة
+                // 
                 if (imageFiles != null && imageFiles.Count > 0)
                 {
                     foreach (var imageFile in imageFiles)
                     {
                         if (imageFile.Length > 0)
                         {
-                            // حدد المسار الصحيح لحفظ الصورة
+                  
                             var filePath = Path.Combine(_environment.WebRootPath, "images/Roomtypes", imageFile.FileName);
 
-                            // حفظ الصورة على المسار
+        
                             using (var stream = new FileStream(filePath, FileMode.Create))
                             {
                                 await imageFile.CopyToAsync(stream);
                             }
 
-                            // أضف الصورة إلى قاعدة البيانات مع ربطها بنوع الغرفة
+                  
                             var image = new Image
                             {
                                 Imagepath = "/images/Roomtypes/" + imageFile.FileName,
-                                Roomtypeid = roomtype.Roomtypeid // استخدم Roomtypeid للربط
+                                Roomtypeid = roomtype.Roomtypeid 
                             };
 
                             _context.Images.Add(image);
                         }
                     }
 
-                    await _context.SaveChangesAsync();  // احفظ التغييرات بعد إضافة الصور
+                    await _context.SaveChangesAsync(); 
                 }
 
-                return RedirectToAction(nameof(Index));  // العودة إلى القائمة بعد الحفظ
+                return RedirectToAction(nameof(Index));  // 
             }
             return View(roomtype);
         }
