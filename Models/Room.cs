@@ -6,6 +6,8 @@ namespace HarmonyHotles.Models;
 
 public partial class Room
 {
+    internal DateTime AvailableFrom;
+
     public decimal Roomid { get; set; }
 
     public decimal? Hotelid { get; set; }
@@ -16,6 +18,9 @@ public partial class Room
 
     public bool? Isavailable { get; set; }
 
+
+    public DateTime? AVAILABLEFROM { get; set; }  
+    public DateTime? AVAILABLETO { get; set; }
     public string? Bedtype { get; set; }
 
     public decimal? Price { get; set; }

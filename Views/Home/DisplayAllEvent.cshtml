@@ -5,54 +5,6 @@
     Layout = "~/Views/Shared/_GustLayout.cshtml";
 }
 
-<style>
-   /* تنسيقات CSS مخصصة */
-    h3 {
-        text-align: center;
-    }
-
-    .card {
-        transition: transform 0.2s ease-in-out;
-    }
-
-    .card:hover {
-        transform: translateY(-10px);
-    }
-
-    .fa-heart {
-        font-size: 1.5rem;
-        background: white;
-        padding: 5px;
-        border-radius: 50%;
-    }
-
-    .card-body h5 {
-        font-weight: bold;
-    }
-
-    .card-body p {
-        margin-bottom: 0.5rem;
-    }
-
-    .search_form .form-control {
-        border-radius: 0;
-        box-shadow: none;
-        border: 1px solid #ccc;
-        height: 50px;
-    }
-
-    .search_btn .btn {
-        height: 50px;
-        border-radius: 0;
-    }
-
-    .no-results {
-        text-align: center;
-        padding: 50px 0;
-        font-size: 1.5rem;
-        color: #888;
-    }
-</style>
 
 <div class="where_togo_area">
     <div class="container">
@@ -91,40 +43,76 @@
 
 <!-- Search Form End -->
 
-<div class="col-lg-6">
-    <div class="section_title text-center mb-4">
-        <h3 class="all-cities-title">Events</h3>
-    </div>
-</div>
 
+<div class="recent_trip_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center mb_70">
+                    <h3>Discover the world's latest crazes</h3>
+                    <p>Don't miss your chance to experience something unique</p>
+                </div>
+
+            </div>
+        </div>
 <div class="container mt-4">
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
-                    <!-- صورة الفعالية -->
-                    <img src="@Url.Content("~/images/events/" + item.Images.FirstOrDefault()?.Imagepath)" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;" asp-append-version="true">
-                    <!-- أيقونة القلب -->
-                    <a asp-action="AddToFavorites" asp-controller="Events" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
-                        <i class="far fa-heart text-danger"></i>
-                    </a>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <!-- Bootstrap Carousel داخل الكرت -->
+                    <div id="carousel-@item.Eventid" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach (var image in item.Images)
+                            {
+                                <div class="carousel-item @(image == item.Images.FirstOrDefault() ? "active" : "")">
+                                    <img src="~/images/events/@(image.Imagepath ?? "default-image.jpg")" alt="@item.Name">
+                                </div>
+                            }
 
-                    <!-- محتوى البطاقة -->
-                    <div class="card-body">
+                        </div>
+                        <!-- أسهم التحكم في السلايدر -->
+                        <a class="carousel-control-prev" href="#carousel-@item.Eventid" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel-@item.Eventid" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+
+                    <div class="card-body text-center">
                         <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> @(item.City != null ? item.City.Cityname : " no city")
-                        </p>
-                        <p class="card-text fw-bold">
-                            <i class="fas fa-money-bill-wave text-success"></i> @item.Ticketprice JD
-                        </p>
-                        <a asp-action="Events" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary">View Details</a>
+                        <p class="card-text"><strong>Country:</strong> @(item.Country?.Countryname ?? "No country associated")</p>
+                        <p class="card-text"><strong>City:</strong> @(item.City?.Cityname ?? "No city associated")</p>
+                        <div class="price">
+                            @item.Ticketprice
+                        </div>
+                        <div class="date mb-2">
+                            @if (item.Timefrom != null && item.Timeto != null)
+                            {
+                                <span>@item.Timefrom</span>
+                            }
+                            else
+                            {
+                                <span>This event is open and has no set time.</span>
+                            }
+                        </div>
+                        <a asp-action="Events" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary mt-2 ">View Details</a>
+
+                        <a asp-action="AddToFavorites" asp-controller="CUST" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
+                            <i class="far fa-heart "></i>
+                        </a>
+
+
+
+
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
-
  

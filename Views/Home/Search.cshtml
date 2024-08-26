@@ -1,0 +1,160 @@
+﻿@model HomeViewModel
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_GustLayout.cshtml";
+}
+
+<h1>Search</h1>
+
+
+<div class="popular_places_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center mb_70">
+                    <h3>Discover a world of luxury and comfort</h3>
+                    <p>Explore the best hotels and enjoy a luxurious stay.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var hotel in Model.Hotels)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
+                        <!-- Carousel for hotel images -->
+                        <div id="carouselExampleControls-@hotel.Hotelid" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var image in hotel.Images)
+                                {
+                                    <div class="carousel-item @(image == hotel.Images.FirstOrDefault() ? "active" : "")">
+                                        <img src="@Url.Content(image.Imagepath)" class="d-block w-100" alt="@hotel.Name" style="height: 250px; object-fit: cover;">
+                                    </div>
+                                }
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls-@hotel.Hotelid" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls-@hotel.Hotelid" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                        <!-- Hotel details -->
+                        <div class="card-body">
+                            <h5 class="card-title">@hotel.Name</h5>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt text-primary"></i> @(hotel.City?.Cityname ?? "No city"), @(hotel.Country?.Countryname ?? "No country")
+                            </p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <span class="d-flex justify-content-center align-items-center">
+                                    @for (int i = 0; i < (int)(hotel.Rating ?? 0); i++)
+                                    {
+                                        <i class="fa fa-star text-warning"></i>
+                                    }
+                                    @for (int i = (int)(hotel.Rating ?? 0); i < 5; i++)
+                                    {
+                                        <i class="fa fa-star-o text-warning"></i>
+                                    }
+                                </span>
+                                <div class="days">
+                                    <i class="fa fa-clock-o"></i>
+                                    <!-- Placeholder for stay duration or other info -->
+                                    <a href="#"> </a>
+                                </div>
+                            </div>
+                            <a asp-action="Hotels" asp-route-id="@hotel.Hotelid" class="btn btn-primary btn-block mt-3">View Details</a>
+                        </div>
+
+                        <!-- Optional price placeholder (commented out until the price logic is clear) -->
+                        <a href="#" class="prise position-absolute" style="top: 10px; left: 10px;">
+                            <!-- Price info can be added here -->
+                        </a>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="recent_trip_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center mb_70">
+                    <h3>Discover the world's latest crazes</h3>
+                    <p>Don't miss your chance to experience something unique</p>
+                </div>
+
+            </div>
+        </div>
+<div class="container mt-4">
+    <div class="row">
+        @foreach (var item in Model.Events)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card">
+                    <!-- Bootstrap Carousel داخل الكرت -->
+                    <div id="carousel-@item.Eventid" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            @foreach (var image in item.Images)
+                            {
+                                <div class="carousel-item @(image == item.Images.FirstOrDefault() ? "active" : "")">
+                                    <img src="~/images/events/@(image.Imagepath ?? "default-image.jpg")" alt="@item.Name">
+                                </div>
+                            }
+
+                        </div>
+                        <!-- أسهم التحكم في السلايدر -->
+                        <a class="carousel-control-prev" href="#carousel-@item.Eventid" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel-@item.Eventid" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text"><strong>Country:</strong> @(item.Country?.Countryname ?? "No country associated")</p>
+                        <p class="card-text"><strong>City:</strong> @(item.City?.Cityname ?? "No city associated")</p>
+                        <div class="price">
+                            @item.Ticketprice
+                        </div>
+                        <div class="date mb-2">
+                            @if (item.Timefrom != null && item.Timeto != null)
+                            {
+                                <span>@item.Timefrom</span>
+                            }
+                            else
+                            {
+                                <span>This event is open and has no set time.</span>
+                            }
+                        </div>
+                        <a asp-action="Events" asp-controller="Home" asp-route-id="@item.Eventid" class="btn btn-primary mt-2 ">View Details</a>
+
+                        <a asp-action="AddToFavorites" asp-controller="CUST" asp-route-id="@item.Eventid" class="position-absolute top-0 end-0 m-2" title="Add to Favorites">
+                            <i class="far fa-heart "></i>
+                        </a>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

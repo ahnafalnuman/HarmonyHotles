@@ -1,0 +1,30 @@
+﻿@model HarmonyHotles.Models.Hotel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Add Service to @ViewBag.HotelName</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <form asp-action="AddServiceToHotel">
+                <input type="hidden" name="hotelId" value="@Model.Hotelid" />
+                <div class="form-group">
+                    <label for="Service">Select Service</label>
+                    <select name="serviceId" class="form-control" asp-items="ViewBag.Services"></select>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">Add Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

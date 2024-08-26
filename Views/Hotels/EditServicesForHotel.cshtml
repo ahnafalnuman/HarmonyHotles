@@ -1,0 +1,19 @@
+﻿@model HarmonyHotles.Models.Hotel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Edit Services for @ViewBag.HotelName</h2>
+
+    <form asp-action="EditServicesForHotel">
+        <input type="hidden" name="hotelId" value="@Model.Hotelid" />
+        <div class="form-group">
+            <label for="Services">Select Services</label>
+            <select multiple name="selectedServices" class="form-control" asp-items="ViewBag.Services"></select>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">Update Services</button>
+        </div>
+    </form>
+</div>

@@ -1,60 +1,12 @@
-﻿@model IEnumerable<HarmonyHotles.Models.Hotel>
+﻿@model HarmonyHotles.Models.HomeViewModel
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_GustLayout.cshtml";
 }
 
-<h1>View</h1>
 
 
-<style>
-    .card img {
-        display: none;
-    }
 
-    .card {
-        border-radius: 15px;
-        overflow: hidden;
-        position: relative;
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-body {
-        padding: 20px;
-    }
-
-    .card-title {
-        font-weight: bold;
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
-
-    .card-text {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 10px;
-    }
-
-        .card-text fw-bold {
-            font-weight: bold;
-        }
-
-    .fas fa-star {
-        color: #ffd700;
-    }
-
-    .far fa-star {
-        color: #ccc;
-    }
-
-    .heart-icon {
-        right: 10px;
-        top: 10px;
-        z-index: 1;
-    }
-</style>
 
 <div class="where_togo_area">
     <div class="container">
@@ -66,7 +18,7 @@
             </div>
             <div class="col-lg-9">
                 <div class="search_wrap">
-                    <form class="search_form" asp-action="DisplayAllHotels" asp-controller="Home" method="post">
+                    <form class="search_form" asp-action="Search" asp-controller="Home" method="post">
                         <div class="input_field">
                             <input type="text" name="destination" placeholder="Where to go?" class="form-control" />
                         </div>
@@ -74,7 +26,7 @@
                             <input type="date" name="startDate" class="form-control" placeholder="Date from" />
                         </div>
                         <div class="input_field">
-                            <input type="date" name="endDate" class="form-control" placeholder="Date to" />
+                            <input type="date" name="endDate" class="form-control " placeholder="Date to" />
                         </div>
                         <div class="search_btn">
                             <button class="boxed-btn4 btn btn-primary" type="submit">Search</button>
@@ -90,110 +42,96 @@
 
 
 
-
-<!-- Search Form End -->
-
-
-<div>
-    <h3>Filter Hotels</h3>
-    <form asp-action="Index" method="get">
-        <div class="form-group">
-            <label for="country">Country:</label>
-            <select id="country" name="country" class="form-control">
-                <option value="">All</option>
-                @foreach (var country in ViewBag.Countries)
-                {
-                    <option value="@country.Countryid">@country.Countryname</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="city">City:</label>
-            <select id="city" name="city" class="form-control">
-                <option value="">All</option>
-                @foreach (var city in ViewBag.Cities)
-                {
-                    <option value="@city.Cityid">@city.Cityname</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" class="form-control">
-                <option value="">All</option>
-                <option value="1">1 Star</option>
-                <option value="2">2 Stars</option>
-                <option value="3">3 Stars</option>
-                <option value="4">4 Stars</option>
-                <option value="5">5 Stars</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </form>
-</div>
-
-
-
-
-
-<div class="col-lg-6">
-    <div class="section_title text-center mb-4">
-        <h3 class="all-cities-title">Hotels</h3>
-    </div>
-</div>
-
-<div class="container mt-4">
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
-                    <div class="heart-icon position-absolute top-0 end-0 m-2" title="Add to Favorites">
-                        <a asp-action="AddToFavorites" asp-controller="Hotels" asp-route-id="@item.Hotelid">
-                            <i class="far fa-heart text-danger"></i>
-                        </a>
-                    </div>
-                    <div id="carouselExampleControls-@item.Hotelid" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            @foreach (var image in item.Images)
-                            {
-                                <div class="carousel-item @(image == item.Images.FirstOrDefault() ? "active" : "")">
-                                    <img src="@Url.Content(image.Imagepath)" class="d-block w-100" alt="@item.Name" style="height: 200px; object-fit: cover;">
-                                </div>
-                            }
-                        </div>
-                        <a class="carousel-control-prev" href="#carouselExampleControls-@item.Hotelid" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleControls-@item.Hotelid" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> @(item.City != null ? item.Country.Countryname : " no city")
-                        </p>
-                        <p class="card-text">
-                            <i class="fas fa-map-marker-alt text-primary"></i> @(item.City != null ? item.City.Cityname : " no city")
-                        </p>
-                        <p class="card-text fw-bold">
-                            @for (int i = 0; i < (int)item.Rating; i++)
-                            {
-                                <i class="fas fa-star text-warning"></i>
-                            }
-                            @for (int i = (int)item.Rating; i < 5; i++)
-                            {
-                                <i class="far fa-star text-warning"></i>
-                            }
-                        </p>
-                        <a asp-action="Events" asp-controller="Home" asp-route-id="@item.Hotelid" class="btn btn-primary"> View Details</a>
-                    </div>
+<div class="popular_places_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center mb_70">
+                    <h3>Discover a world of luxury and comfort</h3>
+                    <p>Explore the best hotels and enjoy a luxurious stay.</p>
                 </div>
             </div>
-        }
+        </div>
+        <div class="row">
+            @foreach (var hotel in Model.Hotels)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place card mb-4 shadow-sm" style="border-radius: 15px; overflow: hidden; position: relative;">
+                        <!-- Carousel for hotel images -->
+                        <div id="carouselExampleControls-@hotel.Hotelid" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach (var image in hotel.Images)
+                                {
+                                    <div class="carousel-item @(image == hotel.Images.FirstOrDefault() ? "active" : "")">
+                                        <img src="@Url.Content(image.Imagepath)" class="d-block w-100" alt="@hotel.Name" style="height: 250px; object-fit: cover;">
+                                    </div>
+                                }
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls-@hotel.Hotelid" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls-@hotel.Hotelid" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                        <!-- Hotel details -->
+                        <div class="card-body">
+                            <h5 class="card-title">@hotel.Name</h5>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt text-primary"></i> @(hotel.City?.Cityname ?? "No city"), @(hotel.Country?.Countryname ?? "No country")
+                            </p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <span class="d-flex justify-content-center align-items-center">
+                                    @for (int i = 0; i < (int)(hotel.Rating ?? 0); i++)
+                                    {
+                                        <i class="fa fa-star text-warning"></i>
+                                    }
+                                    @for (int i = (int)(hotel.Rating ?? 0); i < 5; i++)
+                                    {
+                                        <i class="fa fa-star-o text-warning"></i>
+                                    }
+                                </span>
+                                <div class="days">
+                                    <i class="fa fa-clock-o"></i>
+                                    <!-- Placeholder for stay duration or other info -->
+                                    <a href="#"> </a>
+                                </div>
+                            </div>
+                            <a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@hotel.Hotelid" class="btn btn-primary btn-block mt-3">View Details</a>
+                        </div>
+
+                        <!-- Optional price placeholder (commented out until the price logic is clear) -->
+                        <a href="#" class="prise position-absolute" style="top: 10px; left: 10px;">
+                            <!-- Price info can be added here -->
+                        </a>
+                    </div>
+                </div>
+            }
+
+          
+        </div>
     </div>
 </div>
+
+
+
+        <script>
+        $.ajax({
+            url: "/Home/Search",
+            data: formData,
+            type: "POST",
+            success: function (response) {
+                $("#search-results").html(response);
+            },
+            error: function (xhr, status, error) {
+                alert(" Error : " + error);
+            },
+            complete: function () {
+                console.log("الطلب اكتمل سواء نجح أو فشل");
+            }
+        });
+
+    </script>

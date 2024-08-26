@@ -1,5 +1,4 @@
-﻿@RenderSection("scripts", required: false)
-
+﻿
 <!DOCTYPE html>
 
 <html>
@@ -32,15 +31,58 @@
     <link rel="stylesheet" href="~/HomeDesign/css/slick.css">
     <link rel="stylesheet" href="~/HomeDesign/css/slicknav.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 
     <link rel="stylesheet" href="~/HomeDesign/css/style.css">
 
+    <style>
+        /* تكبير الصورة لتأخذ كامل عرض الكرت */
+        .carousel-item img {
+            width: 100%;
+            height: 400px; /* تكبير الصورة */
+            object-fit: cover;
+        }
 
+        /* تخصيص حجم الأسهم */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* تخصيص شكل السهم عند المرور فوقه */
+        .carousel-control-prev:hover,
+        .carousel-control-next:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* تخصيص موقع الأسهم */
+        .carousel-control-prev,
+        .carousel-control-next {
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+        }
+
+        /* تصميم السعر */
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+            .price del {
+                color: #dc3545;
+                margin-right: 10px;
+            }
+    </style>
 
     <!-- <link rel="stylesheet" href="css/responsive.css"> -->
 </head>
+
+
 <body>
     <header>
         <div class="header-area">
@@ -141,11 +183,14 @@
         </div>
     </header>
 
-    <!-- header-end -->
+
+    @RenderSection("scripts", required: false)
+
+  
 
 
+        <div>
 
-    <div>
         @RenderBody()
     </div>
 
@@ -403,18 +448,51 @@
     <script src="~/HomeDesign/js/jquery.form.js"></script>
     <script src="~/HomeDesign/js/jquery.validate.min.js"></script>
     <script src="~/HomeDesign/js/mail-script.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
 
     <script src="~/HomeDesign/js/main.js"></script>
+
+
+
     <script>
-        $('#datepicker').datepicker({
-            iconsLibrary: 'fontawesome',
-            icons: {
-                rightIcon: '<span class="fa fa-caret-down"></span>'
-            }
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                dots: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 2
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+
+            // التحكم في تغيير لون أيقونة القلب
+            const favoriteToggles = document.querySelectorAll('.favorite-toggle');
+
+            favoriteToggles.forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const heartIcon = this.querySelector('i');
+
+                    if (heartIcon.style.color === 'white') {
+                        heartIcon.style.color = 'red';
+                        // قم بإضافة هنا الكود الذي يقوم بإضافة العنصر إلى المفضلة
+                    } else {
+                        heartIcon.style.color = 'white';
+                        // قم بإضافة هنا الكود الذي يقوم بإزالة العنصر من المفضلة
+                    }
+                });
+            });
         });
     </script>
-
+   
 </body>
 </html>

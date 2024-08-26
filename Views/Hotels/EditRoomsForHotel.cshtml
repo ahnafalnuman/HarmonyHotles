@@ -1,0 +1,38 @@
+﻿@model HarmonyHotles.Models.Hotel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Edit Rooms for @ViewBag.HotelName</h2>
+
+    <form asp-action="EditRoomsForHotel">
+        <input type="hidden" name="hotelId" value="@Model.Hotelid" />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Bed Type</th>
+                    <th>Price</th>
+                    <th>Room Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var room in Model.Rooms)
+                {
+                    <tr>
+                        <td><input asp-for="@room.Roomnumber" class="form-control" /></td>
+                        <td><input asp-for="@room.Bedtype" class="form-control" /></td>
+                        <td><input asp-for="@room.Price" class="form-control" /></td>
+                        <td>
+                            <select asp-for="@room.Roomtypeid" class="form-control" asp-items="ViewBag.RoomTypes"></select>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">Update Rooms</button>
+        </div>
+    </form>
+</div>

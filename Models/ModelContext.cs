@@ -858,6 +858,13 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.Status)
                .HasMaxLength(20)
                .HasColumnName("STATUS");
+            entity.Property(e => e.AVAILABLEFROM)
+      .HasColumnType("DATE")
+      .HasColumnName("AVAILABLEFROM");
+
+            entity.Property(e => e.AVAILABLETO)
+                .HasColumnType("DATE")
+                .HasColumnName("AVAILABLETO");
 
             entity.HasOne(d => d.Hotel).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.Hotelid)

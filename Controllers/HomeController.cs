@@ -19,28 +19,38 @@ namespace HarmonyHotles.Controllers
             _context = context; 
         }
 
-        [HttpGet]   
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var sliders = await _context.Sliders.ToListAsync();
-            var country = await _context.Countries.ToListAsync();
+            var countries = await _context.Countries.ToListAsync();
             var cities = await _context.Cities.ToListAsync();
             var hotels = await _context.Hotels.ToListAsync();
             var events = await _context.Events.ToListAsync();
             var images = await _context.Images.ToListAsync();
             var favorites = await _context.Favorites.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
 
-            /*       // الحصول على المفضلات الخاصة بالمستخدم الحالي
-                   var userId = User.Identity.GetUserId(); // تأكد من استخدام الطريقة الصحيحة للحصول على معرف المستخدم
-                   var favorites = await _context.Favorites.Where(f => f.UserId == userId).ToListAsync();*/
+            var viewModel = new HomeViewModel
+            {
+                Sliders = sliders,
+                Countries = countries,
+                Cities = cities,
+                Hotels = hotels,
+                Events = events,
+                Images = images,
+                Favorites = favorites,
+                Rooms = rooms
+            };
 
-            var models = Tuple.Create<IEnumerable<Slider>, IEnumerable<Country>, IEnumerable<City>, IEnumerable<Hotel>, IEnumerable<Event>, IEnumerable<Image>, IEnumerable<Favorite>>
-              (sliders, country, cities, hotels, events, images, favorites);
-
-            return View(models);
+            return View(viewModel);
         }
+
+
+
+
         [HttpPost]
-        public async Task<IActionResult> Index(string destination, DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> Search(string destination, DateTime? startDate, DateTime? endDate)
         {
             var sliders = await _context.Sliders.ToListAsync();
             var countries = await _context.Countries
@@ -69,8 +79,9 @@ namespace HarmonyHotles.Controllers
 
             var images = await _context.Images.ToListAsync();
             var favorites = await _context.Favorites.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
 
-            // Filtering based on destination, start date, and end date
+            // Filtering logic
             if (!string.IsNullOrEmpty(destination))
             {
                 var lowerDestination = destination.ToLower();
@@ -82,20 +93,100 @@ namespace HarmonyHotles.Controllers
                     (e.Country != null && e.Country.Countryname.ToLower().Contains(lowerDestination)) ||
                     (e.Hotel != null && e.Hotel.Name.ToLower().Contains(lowerDestination)) ||
                     e.Name.ToLower().Contains(lowerDestination)).ToList();
+
+                hotels = hotels.Where(h => h.Name.ToLower().Contains(lowerDestination)).ToList();
             }
 
-            if (startDate.HasValue || endDate.HasValue)
+            // Filter by dates
+            if (startDate == null && endDate == null)
             {
-                events = events.Where(e =>
-                    (!startDate.HasValue || e.Timefrom >= startDate.Value) &&
-                    (!endDate.HasValue || e.Timeto <= endDate.Value)).ToList();
+                ViewBag.TotalHotels = hotels.Count;
+                ViewBag.TotalEvents = events.Count;
+
+                var viewModel = new HomeViewModel
+                {
+                    Sliders = sliders,
+                    Countries = countries,
+                    Cities = cities,
+                    Hotels = hotels,
+                    Events = events,
+                    Images = images,
+                    Favorites = favorites,
+                    Rooms = rooms
+                };
+
+                return View(viewModel);
+            }
+            else if (startDate != null && endDate == null)
+            {
+                events = events.Where(e => e.Timefrom >= startDate.Value).ToList();
+                hotels = hotels.Where(h => h.Rooms.Any(r => r.Isavailable == true && r.AVAILABLEFROM >= startDate.Value)).ToList();
+
+                ViewBag.TotalHotels = hotels.Count;
+                ViewBag.TotalEvents = events.Count;
+
+                var viewModel = new HomeViewModel
+                {
+                    Sliders = sliders,
+                    Countries = countries,
+                    Cities = cities,
+                    Hotels = hotels,
+                    Events = events,
+                    Images = images,
+                    Favorites = favorites,
+                    Rooms = rooms
+                };
+
+                return View(viewModel);
+            }
+            else if (startDate == null && endDate != null)
+            {
+                events = events.Where(e => e.Timeto <= endDate.Value).ToList();
+                hotels = hotels.Where(h => h.Rooms.Any(r => r.Isavailable == true && r.AVAILABLETO <= endDate.Value)).ToList();
+
+                ViewBag.TotalHotels = hotels.Count;
+                ViewBag.TotalEvents = events.Count;
+
+                var viewModel = new HomeViewModel
+                {
+                    Sliders = sliders,
+                    Countries = countries,
+                    Cities = cities,
+                    Hotels = hotels,
+                    Events = events,
+                    Images = images,
+                    Favorites = favorites,
+                    Rooms = rooms
+                };
+
+                return View(viewModel);
+            }
+            else
+            {
+                events = events.Where(e => e.Timefrom >= startDate.Value && e.Timeto <= endDate.Value).ToList();
+                hotels = hotels.Where(h => h.Rooms.Any(r => r.Isavailable == true && r.AVAILABLEFROM >= startDate.Value && r.AVAILABLETO <= endDate.Value)).ToList();
+
+                ViewBag.TotalHotels = hotels.Count;
+                ViewBag.TotalEvents = events.Count;
+
+                var viewModel = new HomeViewModel
+                {
+                    Sliders = sliders,
+                    Countries = countries,
+                    Cities = cities,
+                    Hotels = hotels,
+                    Events = events,
+                    Images = images,
+                    Favorites = favorites,
+                    Rooms = rooms
+                };
+
+                return PartialView("SearchResults", viewModel);
+
             }
 
-            var models = Tuple.Create<IEnumerable<Slider>, IEnumerable<Country>, IEnumerable<City>, IEnumerable<Hotel>, IEnumerable<Event>, IEnumerable<Image>, IEnumerable<Favorite>>
-                (sliders, countries, cities, hotels, events, images, favorites);
-
-            return View(models);
         }
+
 
 
 
@@ -235,56 +326,113 @@ namespace HarmonyHotles.Controllers
             return View(eventDetails);
         }
 
+        /*
+                [HttpGet]
+                public IActionResult DisplayAllHotels()
+                {
+                    var hotels = _context.Hotels
+                        .Include(h => h.Country)
+                        .Include(h => h.City)
+                        .Include(h => h.Country)
+                        .Include(h => h.Images)
+                        .Include(h => h.Rooms)    
+                        .ToList();
 
+                    return View(hotels);
+                }*/
+
+        // Action لعرض تفاصيل فندق معين
         [HttpGet]
-        public IActionResult DisplayAllHotels()
+        public async Task<IActionResult> DisplayAllHotels()
         {
-            var hotels = _context.Hotels
-                .Include(h => h.City)
+            var hotels = await _context.Hotels
                 .Include(h => h.Country)
+                .Include(h => h.City)
                 .Include(h => h.Images)
-                .ToList();
+                .Include(h => h.Rooms)
+                .ToListAsync();
 
-            return View(hotels);
+            var viewModel = new HomeViewModel
+            {
+                Hotels = hotels,
+                Sliders = await _context.Sliders.ToListAsync()
+            };
+
+            return View(viewModel);
+        }
+       
+        [HttpGet]
+        public async Task<IActionResult> HotelDetails(decimal id)
+        {
+            var hotel = await _context.Hotels
+                .Include(h => h.Images)
+                .Include(h => h.Hotelservices)
+                    .ThenInclude(hs => hs.Services)
+                .Include(h => h.Hotelamenities)
+                    .ThenInclude(ha => ha.Amenity)
+                .Include(h => h.Rooms)
+                    .ThenInclude(r => r.Roomtype)
+                .FirstOrDefaultAsync(h => h.Hotelid == id);
+
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new HomeViewModel
+            {
+                Hotels = new List<Hotel> { hotel },
+                Images = hotel.Images.ToList(),
+                Rooms = hotel.Rooms.ToList(),
+                Events = hotel.Events.ToList(),
+                Favorites = hotel.Favorites.ToList(),
+                Countries = new List<Country> { hotel.Country },
+                Cities = new List<City> { hotel.City },
+                Sliders = await _context.Sliders.ToListAsync()
+            };
+
+            return View(viewModel);
         }
 
 
-              [HttpPost]
-            /*public IActionResult DisplayAllHotels(string country, string city, int? rating)
-            {
-                var hotels = _context.Hotels
-                    .Include(h => h.Country)
-                    .Include(h => h.City)
-                    .Include(h => h.Images);
 
-                if (!string.IsNullOrEmpty(country))
+        /*
+                [HttpPost]
+                public IActionResult DisplayAllHotels(string country, string city, int? rating)
                 {
-                    hotels = hotels.Where(h => h.Country.Countryid == country);
+                    var hotels = _context.Hotels
+                        .Include(h => h.Country)
+                        .Include(h => h.City)
+                        .Include(h => h.Images);
+
+                    if (!string.IsNullOrEmpty(country))
+                    {
+                        hotels = hotels.Where(h => h.Country.Countryid == country);
+                    }
+
+                    if (!string.IsNullOrEmpty(city))
+                    {
+                        hotels = hotels.Where(h => h.City.Cityid == city);
+                    }
+
+                    if (rating.HasValue)
+                    {
+                        hotels = hotels.Where(h => h.Rating == rating);
+                    }
+
+                    var countries = _context.Countries.ToList();
+                    var cities = _context.Cities.ToList();
+
+                    var viewModel = new HotelFilterViewModel
+                    {
+                        Hotels = hotels.ToList(),
+                        Countries = countries,
+                        Cities = cities
+                    };
+
+                    return View(viewModel);
                 }
-
-                if (!string.IsNullOrEmpty(city))
-                {
-                    hotels = hotels.Where(h => h.City.Cityid == city);
-                }
-
-                if (rating.HasValue)
-                {
-                    hotels = hotels.Where(h => h.Rating == rating);
-                }
-
-                var countries = _context.Countries.ToList();
-                var cities = _context.Cities.ToList();
-
-                var viewModel = new HotelFilterViewModel
-                {
-                    Hotels = hotels.ToList(),
-                    Countries = countries,
-                    Cities = cities
-                };
-
-                return View(viewModel);
-            }*/
-    
+        */
 
 
 

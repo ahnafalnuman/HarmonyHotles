@@ -19,9 +19,19 @@ namespace HarmonyHotles.Controllers
             _context = context;
             _environment = environment;
         }
+       
 
-        // GET: Hotels
-        public async Task<IActionResult> Index()
+
+
+
+
+
+
+
+
+
+    // GET: Hotels
+    public async Task<IActionResult> Index()
         {
             var modelContext = _context.Hotels.Include(h => h.City)
                                               .Include(h => h.Country)
@@ -201,6 +211,8 @@ namespace HarmonyHotles.Controllers
             ViewData["Countryid"] = new SelectList(_context.Countries, "Countryid", "Countryname", hotel.Countryid);
             return View(hotel);
         }
+
+
 
         // GET: Hotels/Delete/5
         public async Task<IActionResult> Delete(decimal? id)
